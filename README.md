@@ -1,70 +1,65 @@
-# Getting Started with Create React App
+# Juan Mo' Journals Developing Guide
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Structure 
 
-## Available Scripts
+The web app is built using [React](https://reactjs.org/docs/getting-started.html), with [React Redux](https://react-redux.js.org/) for site state management, with [Axios](https://react-redux.js.org/) for api calls and [React Router](https://reactrouter.com/web/guides/quick-start) for routing. It is themed using [semantic ui](https://reactrouter.com/web/guides/quick-start).
 
-In the project directory, you can run:
+### `src` folder
 
-### `npm start`
+In the `src` folder you will find the heart of the frontend system. It has been bootstrapped with an authentication system (login/register) that will route the logged in user to their respective view depending on the user type (admin, editor, researcher, reviewer, and viewer). 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+#### `src/store` folder
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+In the `src/store` folder you will find all the files needed by the redux store. Speciffically you will find the reducers in the `src/store/reducers`, the actions in the `src/store/actions` and selectors in `src/store/selectors`
 
-### `npm test`
+#### `src/utils` folder
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+General utilities for the app are in the `src/utils` folder. As of now there is only one utility, `API` which is an axios instance configured to talk to the backend using credentials. **Always use API util instead of axios**
 
-### `npm run build`
+#### `src/components` folder
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+In the `src/components` folder you will find components that are general to the entire site. Any view-specific component should be placed under the respective `components` folder for that view.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### `src/views/` folder
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+In the `src/views/` folder are the views for each type of user. This are bare components and need to be built.
 
-### `npm run eject`
+Each view has been initialized with a `components` folder, and an `index.js` entrypoint.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+There are two premade components in each view: `Navigation` and `Home` feel free to add any components you need.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## How to run it?
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Before anything 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Before you can run the system you must install its dependencies using:
 
-## Learn More
+`npm install`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This is only necessary once. After you have installed the dependencies they will stay installed unless you remove the `node_modules` folder.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Running the app
 
-### Code Splitting
+Since this web app is dependent on the backend system, you must first start the backend system. Once that is up and running, run the following command in the root of the application.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+`npm start`
 
-### Analyzing the Bundle Size
+### Premade accounts
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+There are premade user accounts to facilitate testing:
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Admin:
+    - email: admin@mail.com
+    - password: password
+- Editor: 
+    - email: editor@mail.com
+    - password: password
+- Researcher:
+    - email: researcher@mail.com
+    - password: password\
+- Reviewer:
+    - email: reviewer@mail.com
+    - password: password
+- Viewer:
+    - email: viewer@mail.com
+    - password: password
