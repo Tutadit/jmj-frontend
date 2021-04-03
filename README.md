@@ -34,9 +34,21 @@ There are two premade components in each view: `Navigation` and `Home` feel free
 
 ### Before anything 
 
+Install npm and nodejs
+
+```
+sudo apt install nodejs npm
+```
+
+
 Before you can run the system you must install its dependencies using:
 
-`npm install`
+```
+npm install typescript
+
+npm install
+```
+
 
 This is only necessary once. After you have installed the dependencies they will stay installed unless you remove the `node_modules` folder.
 
