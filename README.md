@@ -1,4 +1,6 @@
-# Juan Mo' Journals Developing Guide
+# Juan Mo' Journals Frontend Developing Guide
+
+> Note: First follow the guide to setting up the backend. From there use the ubuntu terminal from your windows machine to start this frontend
 
 ## Structure 
 
