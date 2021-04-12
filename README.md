@@ -40,6 +40,7 @@ Install npm and nodejs
 sudo apt install nodejs npm
 ```
 
+Clone this repo, and cd into it
 
 Before you can run the system you must install its dependencies using:
 
