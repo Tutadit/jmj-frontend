@@ -4,7 +4,7 @@
 
 ## Structure 
 
-The web app is built using [React](https://reactjs.org/docs/getting-started.html), with [React Redux](https://react-redux.js.org/) for site state management, with [Axios](https://react-redux.js.org/) for api calls and [React Router](https://reactrouter.com/web/guides/quick-start) for routing. It is themed using [semantic ui](https://reactrouter.com/web/guides/quick-start).
+The web app is built using [React](https://reactjs.org/docs/getting-started.html), with [React Redux](https://react-redux.js.org/) for site state management, with [Axios](https://react-redux.js.org/) for api calls and [React Router](https://reactrouter.com/web/guides/quick-start) for routing. It is themed using [semantic ui](https://react.semantic-ui.com/).
 
 ### `src` folder
 
@@ -40,6 +40,7 @@ Install npm and nodejs;
 sudo apt install nodejs npm
 ```
 
+Clone this repo, and cd into it
 
 Before you can run the system you must install its dependencies using:
 
