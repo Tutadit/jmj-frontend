@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../../store/selectors/user";
 import { logout } from "../../store/actions/user";
 import './index.css';
-import { Menu } from "semantic-ui-react";
+import { Menu, Dropdown } from "semantic-ui-react";
+import { NavLink } from "react-router-dom";
 import API from "../../utils/API";
 
 const UserNav = () => {
@@ -20,12 +21,15 @@ const UserNav = () => {
     return (
         <Menu.Menu position='right'>
             { user && <>            
-            <Menu.Item>
-                <p>{user.firstName} {user.lastName}</p>
-            </Menu.Item>
-            <Menu.Item
-                name='Logout' 
-                onClick={handleLogout}/> 
+            <Dropdown item text={user.firstName + ' ' + user.lastName}>
+                <Dropdown.Menu>
+                    <Dropdown.Item exact to={`/${user.type}/user/tokens`} 
+                            as={NavLink}>
+                            Tokens
+                    </Dropdown.Item>
+                    <Dropdown.Item text="Logout"  onClick={handleLogout}/>
+                </Dropdown.Menu>
+            </Dropdown>
             </>}
         </Menu.Menu>
     );  

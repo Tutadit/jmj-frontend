@@ -34,7 +34,7 @@ There are two premade components in each view: `Navigation` and `Home` feel free
 
 ### Before anything 
 
-Install npm and nodejs
+Install npm and nodejs;
 
 ```
 sudo apt install nodejs npm

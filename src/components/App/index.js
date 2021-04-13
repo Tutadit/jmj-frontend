@@ -14,6 +14,7 @@ import {
 import Login from "../Login";
 import PrivateRoute from "../PrivateRoute";
 import Register from "../Register";
+import UserTokens from "../UserTokens";
 
 import Admin from '../../views/Admin';
 import Editor from '../../views/Editor';
@@ -43,7 +44,7 @@ const App = () => {
                 </Menu.Item>
             </Menu>
             }
-            <Switch>
+            <Switch>                
                 <Route exact path="/">
                     <Redirect to="login" />
                 </Route>
@@ -71,7 +72,16 @@ const App = () => {
                             type="researcher" >  
                     <Researcher />                  
                 </PrivateRoute> 
+                
             </Switch> 
+            <PrivateRoute path={[
+                "/admin/user/tokens",
+                "/viewer/user/tokens",
+                "/editor/user/tokens",
+                "/researcher/user/tokens",
+                "/reviewer/user/tokens"]}>
+                <UserTokens />
+            </PrivateRoute>
         </>     
     );  
 };

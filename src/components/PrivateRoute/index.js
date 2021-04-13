@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { getUser } from "../../store/actions/user";
 import { selectUser } from "../../store/selectors/user";
 import './index.css';
-const PrivateRoute = ({ children, type, ...rest}) => {
+const PrivateRoute = ({ children, type = 'any', ...rest}) => {
 
 	const user = useSelector(selectUser);
 	const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const PrivateRoute = ({ children, type, ...rest}) => {
 		<Route
 		  {...rest}
 		  render={({ location }) =>
-			user && user.type !== type ? 
+			type !== 'any' && user && user.type !== type ? 
 			<Redirect to={`/${user.type}`} />
 			: user ? (
 			  children
