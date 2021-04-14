@@ -57,7 +57,8 @@ const Login = (props) => {
 							props.location.state.from.pathname : `/${user.type}`} />
 
     return (
-        <div className="login ui container middle">
+       <div className="login">
+       <div className="ui container middle">
             <Form onSubmit={handleSubmit}>
                 <Form.Field>
                     <label>Email</label>
@@ -81,6 +82,7 @@ const Login = (props) => {
                 </Form.Field>
                 <Form.Button type='submit' primary>Submit</Form.Button>
             </Form>
+        </div>
         </div>
     );  
 };

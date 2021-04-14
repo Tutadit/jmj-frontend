@@ -3,11 +3,13 @@ import React from "react";
 import {
     Switch,
     Route,
-    useRouteMatch
+    useRouteMatch,
+    Redirect
   } from "react-router-dom";
 
 import Home from "./components/Home";
 import Navigation from "./components/Navigation";
+import UserList from "./components/UsersList";
 
 import './index.css';
 
@@ -21,10 +23,16 @@ const Admin = () => {
             <div className="ui container middle">
                 <Switch>
                     <Route exact path={path}>
-                        <Home />
+                        <Redirect to = {`${path}/users`} />
                     </Route>
-                    <Route path={`${path}/example`}>
-                        Make it go
+                    <Route path={`${path}/users`}>
+                        <UserList />
+                    </Route>
+                    <Route path={`${path}/publications`}>
+                        publications
+                    </Route>
+                    <Route path={`${path}/withdrawls`}>
+                        withdrawls
                     </Route>
                 </Switch>
             </div>
