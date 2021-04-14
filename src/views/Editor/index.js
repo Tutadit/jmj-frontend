@@ -3,11 +3,17 @@ import React from "react";
 import {
     Switch,
     Route,
-    useRouteMatch
+    useRouteMatch,
+    Redirect
   } from "react-router-dom";
 
 import Home from "./components/Home";
 import Navigation from "./components/Navigation";
+import PapersList from "./components/PapersList";
+import ResearchersList from "./components/ResearchersList"
+import ReviewersList from "./components/ReviewersList"
+import SignupsList from "./components/SignupsList"
+import PublicationsList from "./components/PublicationsList"
 
 import './index.css';
 
@@ -21,10 +27,22 @@ const Editor = () => {
             <div className="ui container middle">
                 <Switch>
                     <Route exact path={path}>
-                        <Home />
+                        <Redirect to = {`${path}/papers`} />
                     </Route>
-                    <Route path={`${path}/example`}>
-                        Make it go
+                    <Route path={`${path}/papers`}>
+                        <PapersList />
+                    </Route>
+                    <Route path={`${path}/researchers`}>
+                        <ResearchersList />
+                    </Route>
+                    <Route path={`${path}/reviewers`}>
+                        <ReviewersList />
+                    </Route>
+                    <Route path={`${path}/signups`}>
+                        <SignupsList />
+                    </Route>
+                    <Route path={`${path}/publications`}>
+                        <PublicationsList />
                     </Route>
                 </Switch>
             </div>
