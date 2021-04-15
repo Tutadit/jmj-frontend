@@ -6,12 +6,12 @@ import { Link } from "react-router-dom";
 
 import './index.css';
 
-const PapersList = () => {
+const ViewPaper = () => {
     return (
-        <div className="papers-list">
-           papers_list
+        <div className="view-paper">
+           view_paper
         </div>       
     );  
 };
 
-export default PapersList;
+export default ViewPaper;

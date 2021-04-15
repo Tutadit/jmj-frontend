@@ -15,6 +15,13 @@ import ReviewersList from "./components/ReviewersList"
 import SignupsList from "./components/SignupsList"
 import PublicationsList from "./components/PublicationsList"
 
+import ViewPaper from "./components/ViewPaper"
+import ViewResearcher from "./components/ViewResearcher"
+import ViewReviewer from "./components/ViewReviewer"
+import ViewSignup from "./components/ViewSignup"
+import ViewPublication from"./components/ViewPublication"
+
+
 import './index.css';
 
 const Editor = () => {
@@ -26,23 +33,64 @@ const Editor = () => {
             <Navigation url={url} />
             <div className="ui container middle">
                 <Switch>
+                    
                     <Route exact path={path}>
-                        <Redirect to = {`${path}/papers`} />
+                        <Redirect to={`${path}/papers`} />
                     </Route>
+
+                    
                     <Route path={`${path}/papers`}>
                         <PapersList />
                     </Route>
+                    <Route exact path={`${path}/papers/:id`}>
+                        <Redirect to={`${path}/papers/:id/view`} />
+                    </Route>
+                    <Route path={`${path}/papers/:id/view`}>
+                        <ViewPaper />
+                    </Route>
+                    
+                    
                     <Route path={`${path}/researchers`}>
                         <ResearchersList />
                     </Route>
+                    <Route exact path={`${path}/researchers/:id`}>
+                        <Redirect to={`${path}/researchers/:id/view`} />
+                    </Route>
+                    <Route path={`${path}/researchers/:id/view`}>
+                        <ViewResearcher />
+                    </Route>
+
+
                     <Route path={`${path}/reviewers`}>
                         <ReviewersList />
                     </Route>
+                    <Route exact path={`${path}/reviewers/:id`}>
+                        <Redirect to={`${path}/reviewers/:id/view`} />
+                    </Route>
+                    <Route path={`${path}/reviewers/:id/view`}>
+                        <ViewReviewer />
+                    </Route>
+
+
                     <Route path={`${path}/signups`}>
                         <SignupsList />
                     </Route>
+                    <Route exact path={`${path}/signups/:id`}>
+                        <Redirect to={`${path}/signups/:id/view`} />
+                    </Route>
+                    <Route path={`${path}/signups/:id/view`}>
+                        <ViewSignup />
+                    </Route>
+
+
                     <Route path={`${path}/publications`}>
                         <PublicationsList />
+                    </Route>
+                    <Route exact path={`${path}/publications/:id`}>
+                        <Redirect to={`${path}/publications/:id/view`} />
+                    </Route>
+                    <Route path={`${path}/publications/:id/view`}>
+                        <ViewPublication />
                     </Route>
                 </Switch>
             </div>
