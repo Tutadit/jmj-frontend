@@ -11,6 +11,7 @@ import Navigation from "./components/Navigation";
 import UserList from "./components/UsersList";
 import ViewUser from "./components/ViewUser";
 import EditUser from "./components/EditUser";
+import PublicationsList from "./components/PublicationsList";
 
 import './index.css';
 
@@ -41,7 +42,7 @@ const Admin = () => {
                     </Route>
 
                     <Route path={`${path}/publications`}>
-                        publications
+                        <PublicationsList />
                     </Route>
                     <Route path={`${path}/withdrawls`}>
                         withdrawls

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import API from '../../../../utils/API';
 import { Container, Header, Loader, Table, Icon, Button, } from 'semantic-ui-react';
-
+import { Link } from "react-router-dom";
 const ViewUser = () => {
 
     let { id } = useParams();
@@ -57,6 +57,8 @@ const ViewUser = () => {
                                     floated='right'
                                     icon
                                     secondary
+                                    to={`/admin/users/${id}/edit`}
+                                    as={Link}
                                     size='small'>
                                     <Icon name='pencil' />
                                     Edit User
@@ -74,7 +76,7 @@ const ViewUser = () => {
                             <Table.Cell>{user.last_name}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
-                            <Table.Cell>Type</Table.Cell>
+                            <Table.Cell>User Type</Table.Cell>
                             <Table.Cell>{user.type}</Table.Cell>
                         </Table.Row>
                         <Table.Row>

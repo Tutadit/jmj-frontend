@@ -36,7 +36,8 @@ const UserList = () => {
     }
 
     return (
-        <div className="users-list"> 
+        <Container className="users-list"> 
+            <Header dividing>All Users</Header>
             <Table celled>
                 <Table.Header>
                     <Table.Row>
@@ -116,7 +117,7 @@ const UserList = () => {
                     </Button>
                 </Modal.Actions>
             </Modal>                    
-        </div>
+        </Container>
     )
 }
 export default UserList;
