@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import API from '../../../../utils/API';
 
-import { Table, Button, Icon, Modal, Header, Container } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Container, Header, Loader, Table, Icon, Button, } from 'semantic-ui-react';
 
 import './index.css';
 
 const ViewResearcher = () => {
+
+
+
+    
     return (
         <div className="view-researcher">
            view_reseacher

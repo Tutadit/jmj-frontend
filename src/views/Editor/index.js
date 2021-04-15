@@ -39,7 +39,7 @@ const Editor = () => {
                     </Route>
 
                     
-                    <Route path={`${path}/papers`}>
+                    <Route exact path={`${path}/papers`}>
                         <PapersList />
                     </Route>
                     <Route exact path={`${path}/papers/:id`}>
@@ -50,7 +50,7 @@ const Editor = () => {
                     </Route>
                     
                     
-                    <Route path={`${path}/researchers`}>
+                    <Route exact path={`${path}/researchers`}>
                         <ResearchersList />
                     </Route>
                     <Route exact path={`${path}/researchers/:id`}>
@@ -61,7 +61,7 @@ const Editor = () => {
                     </Route>
 
 
-                    <Route path={`${path}/reviewers`}>
+                    <Route exact path={`${path}/reviewers`}>
                         <ReviewersList />
                     </Route>
                     <Route exact path={`${path}/reviewers/:id`}>
@@ -72,7 +72,7 @@ const Editor = () => {
                     </Route>
 
 
-                    <Route path={`${path}/signups`}>
+                    <Route exact path={`${path}/signups`}>
                         <SignupsList />
                     </Route>
                     <Route exact path={`${path}/signups/:id`}>
@@ -83,7 +83,7 @@ const Editor = () => {
                     </Route>
 
 
-                    <Route path={`${path}/publications`}>
+                    <Route exact path={`${path}/publications`}>
                         <PublicationsList />
                     </Route>
                     <Route exact path={`${path}/publications/:id`}>
