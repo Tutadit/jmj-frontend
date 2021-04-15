@@ -12,13 +12,25 @@ const EditorNavigation = ({url}) => {
 
     return (
         <Menu>
-            <Menu.Item exact to={`${url}`}
+            <Menu.Item exact to={`${url}/papers`}
                 as={NavLink}>
-                Home
+                Papers
             </Menu.Item>
-            <Menu.Item exact to={`${url}/example`}
+            <Menu.Item exact to={`${url}/researchers`}
                 as={NavLink}>
-                Example
+                Researchers
+            </Menu.Item>
+            <Menu.Item exact to={`${url}/reviewers`}
+                as={NavLink}>
+                Reviewers
+            </Menu.Item>
+            <Menu.Item exact to={`${url}/signups`}
+                as={NavLink}>
+                Sign-ups
+            </Menu.Item>
+            <Menu.Item exact to={`${url}/publications`}
+                as={NavLink}>
+                Publications
             </Menu.Item>
             <UserNav />
         </Menu>   
