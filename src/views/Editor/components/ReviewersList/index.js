@@ -4,7 +4,7 @@ import API from '../../../../utils/API';
 import { Table, Button, Icon, Modal, Header, Container } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import './index.css';
+//import './index.css';
 
 const ReviewersList = () => {
 
@@ -30,6 +30,7 @@ const ReviewersList = () => {
 
     return (
         <div className="reviewers-list">
+            <Header floated='left'>View Reviewers</Header>
             <Table celled>
                 <Table.Header>
                     <Table.Row>
@@ -50,7 +51,9 @@ const ReviewersList = () => {
                                     <Icon name='eye' />
                                 </Button.Content>
                             </Button>
-                            <Button secondary animated='vertical'>
+                            <Button secondary animated='vertical'
+                                    to={`/editor/reviewers/${user.id}/papers`}
+                                    as={Link}>
                                 <Button.Content hidden>Papers</Button.Content>
                                 <Button.Content visible>
                                     <Icon name='file text' />

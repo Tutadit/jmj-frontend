@@ -4,7 +4,7 @@ import API from '../../../../utils/API';
 import { Table, Button, Icon, Modal, Header, Container } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import './index.css'
+//import './index.css'
 
 const ResearchersList= () => {
 
@@ -30,6 +30,7 @@ const ResearchersList= () => {
     // return 
     return (
         <div className="researchers-list">
+            <Header floated='left'>View Researchers</Header>
             <Table celled>
                 <Table.Header>
                     <Table.Row>
