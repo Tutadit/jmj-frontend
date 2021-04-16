@@ -5,3 +5,7 @@
 i.select_icon {
     margin:4px !important;
 }
+
+.btn-margin {
+    margin:0 10px;
+}

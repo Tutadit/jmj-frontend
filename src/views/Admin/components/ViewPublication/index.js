@@ -4,11 +4,16 @@ import API from '../../../../utils/API';
 import { Container, Header, Loader, Table, Icon, Button, Segment, Modal, Embed} from 'semantic-ui-react';
 import { Link } from "react-router-dom";
 
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../../../store/selectors/user';
+
 import './index.css'
 
 const ViewPublication = () => {
 
     let { id } = useParams();
+
+    const user = useSelector(selectUser);
 
     const [fetch, setFetch ] = useState(true);
     const [ journal, setJournal ] = useState(null);        
@@ -39,16 +44,17 @@ const ViewPublication = () => {
                         <Table.Row>
                             <Table.HeaderCell />
                             <Table.HeaderCell>
+                            {  ( user.type === 'admin' || user.type === 'editor' ) &&
                                 <Button labelPosition='left'
                                     floated='right'
                                     icon
                                     secondary
-                                    to={`/admin/publications/${id}/edit`}
+                                    to={`/${user.type}/publications/${id}/edit`}
                                     as={Link}
                                     size='small'>
                                     <Icon name='pencil' />
                                     Edit Publication
-                                </Button>
+                                </Button>}
                             </Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
@@ -61,18 +67,19 @@ const ViewPublication = () => {
                             <Table.Cell>Published Date</Table.Cell>
                             <Table.Cell>{journal.published_date}</Table.Cell>
                         </Table.Row>
+                        {  ( user.type === 'admin' || user.type === 'editor' ) &&
                         <Table.Row>
                             <Table.Cell>Status</Table.Cell>
                             <Table.Cell>{journal.status}</Table.Cell>
-                        </Table.Row>
+                        </Table.Row>}
                         <Table.Row>
                             <Table.Cell>Editor</Table.Cell>
                             <Table.Cell>{journal.editor_email}</Table.Cell>
                         </Table.Row>
-                        <Table.Row>
+                        {  ( user.type === 'admin' || user.type === 'editor' ) &&<Table.Row>
                             <Table.Cell>Admin</Table.Cell>
                             <Table.Cell>{journal.admin_email}</Table.Cell>
-                        </Table.Row>                        
+                        </Table.Row> }                       
                     </Table.Body>
                 </Table>
                 
@@ -85,9 +92,10 @@ const ViewPublication = () => {
                     <Table.Row>
                         <Table.HeaderCell>Title</Table.HeaderCell>
                         <Table.HeaderCell>Researcher</Table.HeaderCell>
+                        {  ( user.type === 'admin' || user.type === 'editor' ) && <>
                         <Table.HeaderCell>Editor</Table.HeaderCell>
                         <Table.HeaderCell>Metric Used</Table.HeaderCell>
-                        <Table.HeaderCell>Status</Table.HeaderCell>
+                        <Table.HeaderCell>Status</Table.HeaderCell></>}
                         <Table.HeaderCell>File</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -95,11 +103,12 @@ const ViewPublication = () => {
                     { journal.papers.map(paper => <Table.Row key={paper.id}>
                         <Table.Cell>{paper.title}</Table.Cell>
                         <Table.Cell>{paper.researcher_email}</Table.Cell>
+                        {  ( user.type === 'admin' || user.type === 'editor' ) && <>
                         <Table.Cell>{paper.editor_email}</Table.Cell>
                         <Table.Cell>{paper.em_name}</Table.Cell> 
-                        <Table.Cell>{paper.status}</Table.Cell> 
+                        <Table.Cell>{paper.status}</Table.Cell> </>}
                         <Table.Cell>
-                            <Button secondary
+                        <Button secondary
                                     icon
                                     onClick={e => {
                                         setPaper(paper)
@@ -107,7 +116,7 @@ const ViewPublication = () => {
                                     }}
                                     labelPosition='left'>
                                 <Icon name="file alternate" />
-                                {paper.file_path}
+                                View File
                             </Button>    
                         </Table.Cell> 
                     </Table.Row>)}
