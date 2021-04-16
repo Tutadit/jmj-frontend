@@ -4,6 +4,9 @@ import API from '../../../../utils/API';
 import { useHistory } from "react-router-dom";
 import { Container, Header, Loader, Table, Icon, Button, Segment, Modal, Embed, Form} from 'semantic-ui-react';
 
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../../../store/selectors/user'
+
 import './index.css'
 
 const status_types = [
@@ -16,6 +19,8 @@ const EditPublication = () => {
 
     let { id } = useParams();
     let history = useHistory();
+
+    const user = useSelector(selectUser);
 
     const [fetch, setFetch ] = useState(true);
     const [ journal, setJournal ] = useState({
@@ -141,6 +146,7 @@ const EditPublication = () => {
         else
             setChanged({new_journal:true});
     }
+    
     if (!journal)
         return <Container><Loader active inline='centered' /></Container>
 
@@ -242,6 +248,7 @@ const EditPublication = () => {
                         <Table.Row>
                             <Table.Cell>Editor</Table.Cell>
                             <Table.Cell>
+                            {  ( user.type === 'admin' ) ?
                                 <Form.Input name="editor_email"
                                             placeholder="Editor Email"       
                                             value={journal.editor_email}
@@ -254,12 +261,13 @@ const EditPublication = () => {
                                                 circular: true, 
                                                 link:true,
                                                 onClick: e => saveField('editor_email',journal.editor_email)
-                                            }}/>
+                                            }}/> : journal.editor_email}
                             </Table.Cell>
                         </Table.Row>                    
                         <Table.Row>
                             <Table.Cell>Admin</Table.Cell>
                             <Table.Cell>
+                            {  ( user.type === 'admin' ) ?
                                 <Form.Input name="admin_email"
                                             placeholder="Admin Email"       
                                             value={journal.admin_email}
@@ -272,7 +280,7 @@ const EditPublication = () => {
                                                 circular: true, 
                                                 link:true,
                                                 onClick: e => saveField('admin_email',journal.admin_email)
-                                            }}/>
+                                            }}/> : journal.admin_email }
                             </Table.Cell>
                         </Table.Row>                        
                     </Table.Body>
@@ -321,7 +329,7 @@ const EditPublication = () => {
                                     }}
                                     labelPosition='left'>
                                 <Icon name="file alternate" />
-                                {paper.file_path}
+                                View File
                             </Button>    
                         </Table.Cell> 
                         <Table.Cell>
@@ -374,7 +382,7 @@ const EditPublication = () => {
                                                     }}
                                                     labelPosition='left'>
                                                 <Icon name="file alternate" />
-                                                {paper.file_path}
+                                                View File
                                             </Button>
                                         </Table.Cell>
                                         <Table.Cell>

@@ -11,13 +11,18 @@ import {
     Segment
 } from 'semantic-ui-react';
 
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../../../store/selectors/user';
+
 import { 
     Link
 } from 'react-router-dom'
 
 import API from '../../../../utils/API';
 
-const PublicationsList = () => {
+const PublicationsList = ({ noEdit = false }) => {
+
+    const user = useSelector(selectUser);
 
     const [ fetchPublications, setFetchPublications ] = useState(true);
     const [ journals, setJournals ] = useState(null);
@@ -54,15 +59,16 @@ const PublicationsList = () => {
     <Container>
         <Segment clearing vertical>
             <Header floated='left'>All Publications</Header>
+            { ( user.type === 'admin' || user.type === 'editor' ) &&
             <Button primary
                     icon
                     labelPosition='left'
                     floated='right'
                     as={Link}
-                    to='/admin/publications/new/edit'>
+                    to={`/${user.type}/publications/new/edit`}>
                         <Icon name='plus' />
                         New Publication
-                    </Button>
+            </Button> }
         </Segment>
         
         <Table celled>
@@ -70,7 +76,8 @@ const PublicationsList = () => {
                 <Table.Row>
                     <Table.HeaderCell>Title</Table.HeaderCell>
                     <Table.HeaderCell>Published Date</Table.HeaderCell>
-                    <Table.HeaderCell>Status</Table.HeaderCell>
+                    { ( user.type === 'admin' || user.type === 'editor' ) &&
+                    <Table.HeaderCell>Status</Table.HeaderCell> }
                     <Table.HeaderCell>Actions</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
@@ -79,18 +86,20 @@ const PublicationsList = () => {
                     <Table.Row key={journal.id}>
                         <Table.Cell>{journal.title}</Table.Cell>
                         <Table.Cell>{journal.published_date}</Table.Cell>
-                        <Table.Cell>{journal.status}</Table.Cell>
+                        { ( user.type === 'admin' || user.type === 'editor' ) &&
+                        <Table.Cell>{journal.status}</Table.Cell>}
                         <Table.Cell textAlign='center'>
-                        <Button primary animated='vertical'
-                                    to={`/admin/publications/${journal.id}/view`}
+                            <Button primary animated='vertical'
+                                    to={`/${user.type}/publications/${journal.id}/view`}
                                     as={Link}>
                                 <Button.Content hidden>View</Button.Content>
                                 <Button.Content visible>
                                     <Icon name='eye' />
                                 </Button.Content>
                             </Button>
+                            { !noEdit && <>
                             <Button secondary animated='vertical'
-                                    to={`/admin/publications/${journal.id}/edit`}
+                                    to={`/${user.type}/publications/${journal.id}/edit`}
                                     as={Link}>
                                 <Button.Content hidden>Edit</Button.Content>
                                 <Button.Content visible>
@@ -109,7 +118,7 @@ const PublicationsList = () => {
                                 <Button.Content visible>
                                     <Icon name='delete' />
                                 </Button.Content>
-                            </Button>                  
+                            </Button>  </> }              
                         </Table.Cell>
                     </Table.Row>)}
             </Table.Body>

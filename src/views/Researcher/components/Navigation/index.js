@@ -12,13 +12,13 @@ const ResearcherNavigation = ({url}) => {
 
     return (
         <Menu>
-            <Menu.Item exact to={`${url}`}
+            <Menu.Item to={`${url}/papers`}
                 as={NavLink}>
-                Home
+                My Papers
             </Menu.Item>
-            <Menu.Item exact to={`${url}/example`}
+            <Menu.Item to={`${url}/publications`}
                 as={NavLink}>
-                Example
+                Publications
             </Menu.Item>
             <UserNav />
         </Menu>   
