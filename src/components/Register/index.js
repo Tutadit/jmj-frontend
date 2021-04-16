@@ -22,8 +22,8 @@ const Register = ({props}) => {
 
     const [ userData, setUserData] = useState({
         email:'',
-        firstName:'',
-        lastName:'',
+        first_name:'',
+        last_name:'',
         password:'',
         passwordConfirmation:'',
         type:'',
@@ -92,8 +92,8 @@ const Register = ({props}) => {
             if ( res.data && res.data.user ) {
                 dispatch(login({
                     email: res.data.user.email,
-                    firstName: res.data.user.first_name,
-                    lastName: res.data.user.last_name,
+                    first_name: res.data.user.first_name,
+                    last_name: res.data.user.last_name,
                     type: res.data.user.type,
                 }))
             }
@@ -129,20 +129,20 @@ const Register = ({props}) => {
                 <Form.Field>
                 <label className="white">First Name</label>
                    <Form.Input type="text"
-                            name="firstName"
-                            value={userData.firstName}
-                            error={ error && error.firstName && 
-                                { content: error.firstName.join(' & ') }}
+                            name="first_name"
+                            value={userData.first_name}
+                            error={ error && error.first_name && 
+                                { content: error.first_name.join(' & ') }}
                             placeholder="In here with your name, your first name"
                             onChange={handleChange} />                 
                 </Form.Field> 
                 <Form.Field>
                 <label className="white">Last Name</label>     
                 <Form.Input type="text"
-                            name="lastName"
-                            value={userData.lastName}
-                            error={ error && error.lastName && 
-                                { content: error.lastName.join(' & ') }}
+                            name="last_name"
+                            value={userData.last_name}
+                            error={ error && error.last_name && 
+                                { content: error.last_name.join(' & ') }}
                             placeholder="Your last name here"
                             onChange={handleChange} /> 
                 </Form.Field>

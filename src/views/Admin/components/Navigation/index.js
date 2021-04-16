@@ -12,15 +12,15 @@ const AdminNavigation = ({url}) => {
 
     return (
         <Menu>
-            <Menu.Item exact to={`${url}/users`}
+            <Menu.Item to={`${url}/users`}
                 as={NavLink}>
                 Users
             </Menu.Item>
-            <Menu.Item exact to={`${url}/publications`}
+            <Menu.Item to={`${url}/publications`}
                 as={NavLink}>
                 Publications
             </Menu.Item>
-            <Menu.Item exact to={`${url}/withdrawls`}
+            <Menu.Item to={`${url}/withdrawls`}
                 as={NavLink}>
                 Withdrawls
             </Menu.Item>

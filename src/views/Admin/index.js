@@ -12,6 +12,8 @@ import UserList from "./components/UsersList";
 import ViewUser from "./components/ViewUser";
 import EditUser from "./components/EditUser";
 import PublicationsList from "./components/PublicationsList";
+import EditPublication from "./components/EditPublication";
+import ViewPublication from "./components/ViewPublication";
 
 import './index.css';
 
@@ -41,9 +43,18 @@ const Admin = () => {
                         <EditUser />
                     </Route>
 
-                    <Route path={`${path}/publications`}>
+                    <Route exact path={`${path}/publications`}>
                         <PublicationsList />
                     </Route>
+                    <Route path={`${path}/publications/:id/view`}>
+                        <ViewPublication />
+                    </Route>
+                    <Route path={`${path}/publications/:id/edit`}>
+                        <EditPublication />
+                    </Route>
+
+
+
                     <Route path={`${path}/withdrawls`}>
                         withdrawls
                     </Route>

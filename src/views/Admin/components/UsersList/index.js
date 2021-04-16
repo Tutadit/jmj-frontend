@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import API from '../../../../utils/API';
 
-import { Table, Button, Icon, Modal, Header, Container } from "semantic-ui-react";
+import { Table, Button, Icon, Modal, Header, Container, Segment } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 import './index.css'
@@ -37,12 +37,24 @@ const UserList = () => {
 
     return (
         <Container className="users-list"> 
-            <Header dividing>All Users</Header>
+            <Segment clearing vertical>            
+                <Header floated='left' >All Users</Header>
+                <Button floated='right'
+                        icon
+                        labelPosition='left'
+                        as={Link}
+                        to='/admin/users/new/edit'
+                        primary>
+                    <Icon name='plus' />
+                    Add User
+                </Button>
+            </Segment>
             <Table celled>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Name</Table.HeaderCell>
                         <Table.HeaderCell>User Type</Table.HeaderCell>
+                        <Table.HeaderCell>Status</Table.HeaderCell>
                         <Table.HeaderCell>Actions</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -51,8 +63,9 @@ const UserList = () => {
                     <Table.Row key={user.id}>
                         <Table.Cell>{user.first_name + ' ' + user.last_name}</Table.Cell>
                         <Table.Cell>{user.type}</Table.Cell>
+                        <Table.Cell>{user.status}</Table.Cell>
                         <Table.Cell textAlign='center'>
-                            <Button primary animated='vertical'
+                        <Button primary animated='vertical'
                                     to={`/admin/users/${user.id}/view`}
                                     as={Link}>
                                 <Button.Content hidden>View</Button.Content>

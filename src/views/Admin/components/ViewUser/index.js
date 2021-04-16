@@ -80,6 +80,10 @@ const ViewUser = () => {
                             <Table.Cell>{user.type}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
+                            <Table.Cell>Status</Table.Cell>
+                            <Table.Cell>{user.status}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
                             <Table.Cell>Email</Table.Cell>
                             <Table.Cell>{user.email}</Table.Cell>
                         </Table.Row>
