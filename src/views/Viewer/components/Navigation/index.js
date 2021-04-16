@@ -12,13 +12,9 @@ const ViewerNavigation = ({url}) => {
 
     return (
         <Menu>
-            <Menu.Item exact to={`${url}`}
+            <Menu.Item to={`${url}`}
                 as={NavLink}>
-                Home
-            </Menu.Item>
-            <Menu.Item exact to={`${url}/example`}
-                as={NavLink}>
-                Example
+                Publications
             </Menu.Item>
             <UserNav />
         </Menu>   

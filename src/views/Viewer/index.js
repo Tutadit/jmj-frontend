@@ -3,10 +3,12 @@ import React from "react";
 import {
     Switch,
     Route,
-    useRouteMatch
+    useRouteMatch,
+    Redirect,
   } from "react-router-dom";
+import PublicationsList from "../Admin/components/PublicationsList";
+import ViewPublication from "../Admin/components/ViewPublication";
 
-import Home from "./components/Home";
 import Navigation from "./components/Navigation";
 
 import './index.css';
@@ -21,10 +23,13 @@ const Viewer = () => {
             <div className="ui container middle">
                 <Switch>
                     <Route exact path={path}>
-                        <Home />
+                      <Redirect to={`${path}/publications`}/>
                     </Route>
-                    <Route path={`${path}/example`}>
-                        Make it go
+                    <Route exact path={`${path}/publications`}>
+                        <PublicationsList/>
+                    </Route>
+                    <Route path={`${path}/publications/:id`}>
+                        <ViewPublication/>
                     </Route>
                 </Switch>
             </div>
