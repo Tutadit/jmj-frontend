@@ -50,7 +50,9 @@ const ResearchersList= () => {
                                     <Icon name='eye' />
                                 </Button.Content>
                             </Button>
-                            <Button secondary animated='vertical'>
+                            <Button secondary animated='vertical'
+                                    to={`/editor/researchers/${user.id}/papers`}
+                                    as={Link}>
                                 <Button.Content hidden>Papers</Button.Content>
                                 <Button.Content visible>
                                     <Icon name='file text' />

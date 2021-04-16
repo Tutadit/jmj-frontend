@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import API from '../../../../utils/API';
 
 import { Table, Button, Icon, Modal, Header, Container } from "semantic-ui-react";
-import { Link,  useParams } from "react-router-dom";
+import { Link, useParams} from "react-router-dom";
 
 import './index.css';
 
-const PapersList = () => {
+const ViewPapers = () => {
 
     // create variables
     const [fetch, setFetch] = useState(true);
@@ -15,7 +15,7 @@ const PapersList = () => {
     const [ currentDelete, setCurrentDelete ] = useState(null);
     let {id} = useParams();   // func = hook
 
-    // fetch all papers by the user
+    // fetch all papers by the researcher
     useEffect(() => {
         if(fetch) {
             setFetch(false);
@@ -30,7 +30,8 @@ const PapersList = () => {
 
     // return 
     return (
-        <div className="papers-list">
+        <div className="view-papers">
+        <Header floated='left'>View Papers by Researcher</Header>
         <Table celled>
             <Table.Header>
                 <Table.Row>
@@ -66,4 +67,4 @@ const PapersList = () => {
     );  
 };
 
-export default PapersList;
+export default ViewPapers;

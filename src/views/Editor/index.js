@@ -21,6 +21,8 @@ import ViewReviewer from "./components/ViewReviewer"
 import ViewSignup from "./components/ViewSignup"
 import ViewPublication from"./components/ViewPublication"
 
+import ViewPapers from "./components/ViewPapers"
+
 
 import './index.css';
 
@@ -58,6 +60,9 @@ const Editor = () => {
                     </Route>
                     <Route path={`${path}/researchers/:id/view`}>
                         <ViewResearcher />
+                    </Route>
+                    <Route path={`${path}/researchers/:id/papers`}>
+                        <ViewPapers />
                     </Route>
 
 
