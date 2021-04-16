@@ -19,7 +19,7 @@ const PapersList = () => {
     useEffect(() => {
         if(fetch) {
             setFetch(false);
-            API.get(`/api/paper/by_researcher/${id}`).then(response => {
+            API.get(`/api/paper/all`).then(response => {
                 if (response.data.papers)
                     setPapers(response.data.papers);
             }).catch(error => {
@@ -36,6 +36,9 @@ const PapersList = () => {
                 <Table.Row>
                     <Table.HeaderCell>Title</Table.HeaderCell>
                     <Table.HeaderCell>Status</Table.HeaderCell>
+                    <Table.HeaderCell>Researcher Email</Table.HeaderCell>
+                    <Table.HeaderCell>Reviewer Email</Table.HeaderCell>
+                    <Table.HeaderCell>Evaluation Name</Table.HeaderCell>
                     <Table.HeaderCell>Actions</Table.HeaderCell>
                 </Table.Row>
             </Table.Header>
@@ -44,6 +47,9 @@ const PapersList = () => {
                 <Table.Row key={paper.id}>
                     <Table.Cell>{paper.title}</Table.Cell>
                     <Table.Cell>{paper.status}</Table.Cell>
+                    <Table.Cell>{paper.researcher_email}</Table.Cell>
+                    <Table.Cell>(reviewer email)</Table.Cell>
+                    <Table.Cell>{paper.em_name}</Table.Cell>
                     <Table.Cell textAlign='center'>
                         <Button primary animated='vertical'>
                             <Button.Content hidden>View</Button.Content>
@@ -56,7 +62,13 @@ const PapersList = () => {
                             <Button.Content visible>
                                 <Icon name='pencil' />
                             </Button.Content>
-                        </Button>                                    
+                        </Button>   
+                        <Button tertiary animated='vertical'>
+                            <Button.Content hidden>Revisions</Button.Content>
+                            <Button.Content visible>
+                                <Icon name='time' />
+                            </Button.Content>
+                        </Button>                                  
                     </Table.Cell>
                 </Table.Row>
             )}

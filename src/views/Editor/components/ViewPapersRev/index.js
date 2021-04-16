@@ -44,6 +44,7 @@ const ViewPapersRev = () => {
                         <Table.HeaderCell>Reviewer Email</Table.HeaderCell>
                         <Table.HeaderCell>Major Revision Deadline</Table.HeaderCell>
                         <Table.HeaderCell>Minor Revision Deadline</Table.HeaderCell>
+                        <Table.HeaderCell>Actions</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -62,7 +63,7 @@ const ViewPapersRev = () => {
                                         }}
                                         labelPosition='center'>
                                     <Icon name="file alternate" />
-                                    to do
+                                    View File
                                 </Button>                                
                             </Table.Cell>
                         </Table.Row>)}
