@@ -14,6 +14,7 @@ import EditUser from "./components/EditUser";
 import PublicationsList from "./components/PublicationsList";
 import EditPublication from "./components/EditPublication";
 import ViewPublication from "./components/ViewPublication";
+import ViewWithdrawls from "./components/ViewWithdrawls";
 
 import './index.css';
 
@@ -54,9 +55,8 @@ const Admin = () => {
                     </Route>
 
 
-
                     <Route path={`${path}/withdrawls`}>
-                        withdrawls
+                        <ViewWithdrawls />
                     </Route>
                 </Switch>
             </div>
