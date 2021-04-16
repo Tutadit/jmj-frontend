@@ -28,9 +28,20 @@ const SignupsList = () => {
 
     // 
     const addUser = id => {
-        API.post(`/api/journals/${id}/remove`).then((response) => {
+        API.post(`/api/users/${id}/change_status`).then((response) => {
             if (response.data.success) {
                 setCurrentAdd(null);
+                setUsers(users.filter(user => user.id !== id));
+            }
+        }).catch((error) => {
+            console.error(error);
+        })
+    }
+
+    const removeUser = id => {
+        API.post(`/api/users/${id}/remove`).then((response) => {
+            if (response.data.success) {
+                setCurrentDelete(null);
                 setUsers(users.filter(user => user.id !== id));
             }
         }).catch((error) => {
@@ -63,6 +74,11 @@ const SignupsList = () => {
                         <Table.Cell textAlign='center'>
                             <Button color='green' animated='vertical'
                                 onClick={(e) => {
+                                    setCurrentAdd({
+                                        firstname:user.first_name,
+                                        last_name:user.last_name,
+                                        id:user.id
+                                    });
                                     addUser(user.id);
                                 }}>
                                 <Button.Content hidden>Add</Button.Content>
@@ -113,7 +129,7 @@ const SignupsList = () => {
                     </Button>
                     <Button color='red' inverted onClick={() => {
                         setOpen(false);
-                        
+                        removeUser(currentDelete?.id)
                         setCurrentDelete(null);
                     }}>
                         <Icon name='checkmark' /> Yes
