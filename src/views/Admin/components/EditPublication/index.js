@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import API from '../../../../utils/API';
 import { useHistory } from "react-router-dom";
 import { Container, Header, Loader, Table, Icon, Button, Segment, Modal, Embed, Form} from 'semantic-ui-react';
-import { Link } from "react-router-dom";
 
 import './index.css'
 
@@ -146,7 +145,7 @@ const EditPublication = () => {
         return <Container><Loader active inline='centered' /></Container>
 
     return(
-        <Container className="view-user">
+        <Container className="edit-publication">
             <Header dividing>Journal Info</Header>
                 <Table definition>
                     <Table.Header>
@@ -163,7 +162,7 @@ const EditPublication = () => {
                                         secondary
                                         size='small'>
                                         <Icon name='save' />
-                                        Save User
+                                        Save Publication
                                     </Button> : 
                                     <Button labelPosition='left'
                                             floated='right'
@@ -241,6 +240,24 @@ const EditPublication = () => {
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
+                            <Table.Cell>Editor</Table.Cell>
+                            <Table.Cell>
+                                <Form.Input name="editor_email"
+                                            placeholder="Editor Email"       
+                                            value={journal.editor_email}
+                                            onChange={handleChange}
+                                            error={ error && error.editor_email && 
+                                                { content: error.editor_email.join(' & '),
+                                                    pointing:'left' }} 
+                                            icon={ changed?.editor_email && { 
+                                                name: 'save', 
+                                                circular: true, 
+                                                link:true,
+                                                onClick: e => saveField('editor_email',journal.editor_email)
+                                            }}/>
+                            </Table.Cell>
+                        </Table.Row>                    
+                        <Table.Row>
                             <Table.Cell>Admin</Table.Cell>
                             <Table.Cell>
                                 <Form.Input name="admin_email"
@@ -250,7 +267,7 @@ const EditPublication = () => {
                                             error={ error && error.admin_email && 
                                                 { content: error.admin_email.join(' & '),
                                                     pointing:'left' }} 
-                                            icon={ changed?.published_date && { 
+                                            icon={ changed?.admin_email && { 
                                                 name: 'save', 
                                                 circular: true, 
                                                 link:true,

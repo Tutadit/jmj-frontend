@@ -11,12 +11,8 @@ const ViewPublication = () => {
     let { id } = useParams();
 
     const [fetch, setFetch ] = useState(true);
-    const [ journal, setJournal ] = useState(null);
-
-    const [ addPaper, setAddPaper ] = useState(false);
-    const [ fetchPapers, setFetchPapers ] = useState(false);
-    const [ papers, setPapers ] = useState(null);
-
+    const [ journal, setJournal ] = useState(null);        
+    
     const [ viewPaper, setViewPaper ] = useState(false);
     const [ paper, setPaper ] = useState(null);
     
@@ -31,49 +27,6 @@ const ViewPublication = () => {
             })
         }
     },[fetch, id]);
-
-    useEffect(() => {
-        if (fetchPapers) {
-            setFetchPapers(false);
-            API.get('/api/paper/all').then((response) =>{
-                if(response.data.papers) {
-                    setPapers(response.data.papers);
-                }
-            }).catch((error) => {
-                console.error(error);
-            })
-        }
-    }, [fetchPapers])
-
-    const addPaperToJournal = paper_id => {
-        API.post(`/api/journals/${id}/add_paper`, {
-            paper_id: paper_id,
-        }).then((response) => {
-            if (response.data.success) {
-                setJournal({
-                    ...journal,
-                    papers:[...journal.papers, response.data.paper]
-                })
-            }
-        }).catch((error) => {
-            console.error(error);
-        })
-    }
-
-    const removePaperFromJournal = paper_id => {
-        API.post(`/api/journals/${id}/remove_paper`, {
-            paper_id: paper_id,
-        }).then((response) => {
-            if (response.data.success) {
-                setJournal({
-                    ...journal,
-                    papers:journal.papers.filter(paper => paper.id !== paper_id)
-                })
-            }
-        }).catch((error) => {
-            console.error(error);
-        })
-    }
 
     if (!journal)
         return <Container><Loader active inline='centered' /></Container>
@@ -111,6 +64,10 @@ const ViewPublication = () => {
                         <Table.Row>
                             <Table.Cell>Status</Table.Cell>
                             <Table.Cell>{journal.status}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell>Editor</Table.Cell>
+                            <Table.Cell>{journal.editor_email}</Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell>Admin</Table.Cell>
