@@ -15,14 +15,13 @@ import ReviewersList from "./components/ReviewersList"
 import SignupsList from "./components/SignupsList"
 import PublicationsList from "./components/PublicationsList"
 
-import ViewPaper from "./components/ViewPaper"
 import ViewResearcher from "./components/ViewResearcher"
 import ViewReviewer from "./components/ViewReviewer"
 import ViewSignup from "./components/ViewSignup"
 import ViewPublication from"./components/ViewPublication"
 
-import ViewPapers from "./components/ViewPapers"
-
+import ViewPapersRes from "./components/ViewPapersRes"
+import ViewPapersRev from "./components/ViewPapersRev"
 
 import './index.css';
 
@@ -44,12 +43,6 @@ const Editor = () => {
                     <Route exact path={`${path}/papers`}>
                         <PapersList />
                     </Route>
-                    <Route exact path={`${path}/papers/:id`}>
-                        <Redirect to={`${path}/papers/:id/view`} />
-                    </Route>
-                    <Route path={`${path}/papers/:id/view`}>
-                        <ViewPaper />
-                    </Route>
                     
                     
                     <Route exact path={`${path}/researchers`}>
@@ -62,7 +55,7 @@ const Editor = () => {
                         <ViewResearcher />
                     </Route>
                     <Route path={`${path}/researchers/:id/papers`}>
-                        <ViewPapers />
+                        <ViewPapersRes />
                     </Route>
 
 
@@ -74,6 +67,9 @@ const Editor = () => {
                     </Route>
                     <Route path={`${path}/reviewers/:id/view`}>
                         <ViewReviewer />
+                    </Route>
+                    <Route path={`${path}/reviewers/:id/papers`}>
+                        <ViewPapersRev />
                     </Route>
 
 
