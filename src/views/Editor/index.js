@@ -7,23 +7,23 @@ import {
     Redirect
   } from "react-router-dom";
 
-import Home from "./components/Home";
 import Navigation from "./components/Navigation";
 import PapersList from "./components/PapersList";
 import ResearchersList from "./components/ResearchersList"
 import ReviewersList from "./components/ReviewersList"
 import SignupsList from "./components/SignupsList"
-import PublicationsList from "./components/PublicationsList"
 
 import ViewResearcher from "./components/ViewResearcher"
 import ViewReviewer from "./components/ViewReviewer"
 import ViewSignup from "./components/ViewSignup"
-import ViewPublication from"./components/ViewPublication"
 
 import ViewPapersRes from "./components/ViewPapersRes"
 import ViewPapersRev from "./components/ViewPapersRev"
 
 import './index.css';
+import ViewPublication from "../Admin/components/ViewPublication";
+import EditPublication from "../Admin/components/EditPublication";
+import PublicationsList from "../Admin/components/PublicationsList";
 
 const Editor = () => {
 
@@ -92,6 +92,9 @@ const Editor = () => {
                     </Route>
                     <Route path={`${path}/publications/:id/view`}>
                         <ViewPublication />
+                    </Route>
+                    <Route path={`${path}/publications/:id/edit`}>
+                        <EditPublication />
                     </Route>
                 </Switch>
             </div>

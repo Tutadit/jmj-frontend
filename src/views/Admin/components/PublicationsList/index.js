@@ -20,7 +20,7 @@ import {
 
 import API from '../../../../utils/API';
 
-const PublicationsList = ({ noEdit = false }) => {
+const PublicationsList = () => {
 
     const user = useSelector(selectUser);
 
@@ -29,6 +29,8 @@ const PublicationsList = ({ noEdit = false }) => {
     const [ open, setOpen ] = useState(false);
     const [ currentDelete, setCurrentDelete ] = useState(null);
 
+    const noEdit = user.type !== 'admin' && user.type !== 'editor';
+    
     useEffect(() => {
         if(fetchPublications) {
             setFetchPublications(false);

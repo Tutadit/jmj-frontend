@@ -224,6 +224,7 @@ const EditPublication = () => {
                         <Table.Row>
                             <Table.Cell>Status</Table.Cell>
                             <Table.Cell>
+                            {  ( user.type === 'admin' ) ? <>
                                 <Form.Select placeholde="Status"  
                                     name='status'
                                     type="date"
@@ -242,7 +243,7 @@ const EditPublication = () => {
                                         circular={true}                                             
                                         link={true}
                                         onClick={ e => saveField('status',journal.status)} />
-                                    }       
+                                    } </> : journal.status }
                             </Table.Cell>
                         </Table.Row>
                         <Table.Row>
