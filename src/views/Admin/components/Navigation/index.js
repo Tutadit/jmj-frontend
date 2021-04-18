@@ -23,7 +23,7 @@ const AdminNavigation = ({url}) => {
             <Menu.Item to={`${url}/withdrawls`}
                 as={NavLink}>
                 Withdrawls
-            </Menu.Item>
+            </Menu.Item>            
             <UserNav />
         </Menu>   
     );  

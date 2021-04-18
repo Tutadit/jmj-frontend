@@ -9,7 +9,7 @@ import {
     Route,
     Redirect,
     NavLink
-  } from "react-router-dom";
+} from "react-router-dom";
 
 import Login from "../Login";
 import PrivateRoute from "../PrivateRoute";
@@ -22,6 +22,9 @@ import Researcher from '../../views/Researcher';
 import Reviewer from '../../views/Reviewer';
 import Viewer from '../../views/Viewer';
 
+import EvaluationMetrics from '../EvaluationMetrics';
+import EditEvaluationMetric from '../EditEvaluationMetric';
+import ViewEvaluationMetric from '../ViewEvaluationMetric';
 
 import 'semantic-ui-less/semantic.less'
 import './index.css';
@@ -29,65 +32,75 @@ import './index.css';
 const App = () => {
 
     const user = useSelector(selectUser);
-   
-    return (    
+
+    return (
         <>
-            { !user &&            
-            <Menu>
-                <Menu.Item exact to="/login" 
-                    as={NavLink}>
-                    Login
+            { !user &&
+                <Menu>
+                    <Menu.Item exact to="/login"
+                        as={NavLink}>
+                        Login
                 </Menu.Item>
-                <Menu.Item exact to="/register" 
-                    as={NavLink}>
-                    Register
+                    <Menu.Item exact to="/register"
+                        as={NavLink}>
+                        Register
                 </Menu.Item>
-            </Menu>
+                </Menu>
             }
-            <Switch>                
+            <Switch>
                 <Route exact path="/">
                     <Redirect to="login" />
                 </Route>
-                <Route  path="/login" 
-                        component={Login} />                    
-                <Route  path="/register" 
-                        component={Register} />    
+                <Route path="/login"
+                    component={Login} />
+                <Route path="/register"
+                    component={Register} />
                 <PrivateRoute path="/admin"
-                                type="admin" > 
+                    type="admin" >
                     <Admin />
                 </PrivateRoute>
                 <PrivateRoute path="/viewer"
-                                type="viewer" >
+                    type="viewer" >
                     <Viewer />
-                </PrivateRoute>  
+                </PrivateRoute>
                 <PrivateRoute path="/editor"
-                                type="editor" > 
-                    <Editor />                   
-                </PrivateRoute> 
+                    type="editor" >
+                    <Editor />
+                </PrivateRoute>
                 <PrivateRoute path="/reviewer"
-                                type="reviewer" >
-                    <Reviewer />                    
-                </PrivateRoute>          
+                    type="reviewer" >
+                    <Reviewer />
+                </PrivateRoute>
                 <PrivateRoute path="/researcher"
-                            type="researcher" >  
-                    <Researcher />                  
-                </PrivateRoute> 
-                
-            </Switch> 
-            <PrivateRoute path={[
-                "/admin/user/tokens",
-                "/viewer/user/tokens",
-                "/editor/user/tokens",
-                "/researcher/user/tokens",
-                "/reviewer/user/tokens"]}>
-                <UserTokens />
-            </PrivateRoute>
+                    type="researcher" >
+                    <Researcher />
+                </PrivateRoute>
+
+            </Switch>
+            { user && <>
+            <Switch>
+                <PrivateRoute exact path={`/${user.type}/evaluation_metrics`} >
+                    <EvaluationMetrics />
+                </PrivateRoute>
+                <PrivateRoute path={`/${user.type}/evaluation_metrics/:id/view`} >
+                    <ViewEvaluationMetric />
+                </PrivateRoute>
+                <PrivateRoute path={`/${user.type}/evaluation_metrics/:id/edit`} >
+                    <EditEvaluationMetric />
+                </PrivateRoute>            
+
+                <PrivateRoute path={`/${user.type}/user/tokens`}>
+                    <UserTokens />
+                </PrivateRoute>
+
+            </Switch>
+            </>}
             <Segment inverted attached='bottom'
-                    className='footer'>
+                className='footer'>
                 Juan Mo Journals
             </Segment>
-        </>     
-    );  
+        </>
+    );
 };
 
 export default App;

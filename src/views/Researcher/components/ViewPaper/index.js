@@ -66,19 +66,7 @@ const ViewPaper = () => {
         )
     return (
         <Container>
-            { withdraw &&
-                <Message color='yellow'>
-                    {withdraw === 'awaiting' ?
-                        <>
-                            <Icon name='exclamation' /> The author of this paper has requested a withdrawl.
-                        </>
-                        : <>
-                            
-                            <Icon name='exclamation' /> The withdrawl request has been rejected.
-                            <Button secondary size='small' onClick={confirmRejection}>Ok :(</Button>
-
-                        </>}
-                </Message>}
+            
             <Segment clearing vertical>
                 <Header floated='left' >Paper Info</Header>
                 <Button floated='right'

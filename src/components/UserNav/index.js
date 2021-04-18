@@ -19,6 +19,11 @@ const UserNav = () => {
     }
 
     return (
+        <>
+        <Menu.Item to={`/${user.type}/evaluation_metrics`}
+            as={NavLink}>
+            Evaluation Metrics
+        </Menu.Item>
         <Menu.Menu position='right'>
             { user && <>            
             <Dropdown item text={user.firstName + ' ' + user.lastName}>
@@ -32,6 +37,7 @@ const UserNav = () => {
             </Dropdown>
             </>}
         </Menu.Menu>
+        </>
     );  
 };
 
