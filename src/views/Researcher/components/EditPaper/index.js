@@ -12,7 +12,8 @@ import {
     Form,
     Modal,
     Embed,
-    Message
+    Message,
+    Card
 } from 'semantic-ui-react'
 
 import {
@@ -55,6 +56,8 @@ const EditPaper = () => {
     const [reviewers, setReviewers] = useState(null);
     const [fetchReviewers, setFetchReviewers] = useState(false);
 
+    const [evaluationMetric, setEvaluationMetric] = useState(null);
+
     const newPaper = id === 'new'
 
     useEffect(() => {
@@ -74,6 +77,8 @@ const EditPaper = () => {
                 if (response.data.withdraw)
                     setWithdrawn(response.data.withdraw);
 
+                if (response.data.evaluation_metric)
+                    setEvaluationMetric(response.data.evaluation_metric)
                 setFetchReviewers(true);
             }).catch(error => {
 
@@ -341,10 +346,6 @@ const EditPaper = () => {
                             <Table.Cell>Editor Email</Table.Cell>
                             <Table.Cell>{paper.editor_email}</Table.Cell>
                         </Table.Row>
-                        <Table.Row>
-                            <Table.Cell>Evaluation Metric</Table.Cell>
-                            <Table.Cell>{paper.em_name}</Table.Cell>
-                        </Table.Row>
                     </>}
                     <Table.Row>
                         <Table.Cell>File</Table.Cell>
@@ -402,6 +403,23 @@ const EditPaper = () => {
                     </Table.Row>
                 </Table.Body>
             </Table>
+            <Divider />
+            <Segment clearing vertical>
+                <Header>Evaluation Metric: {evaluationMetric?.name}</Header>
+            </Segment>
+            <Divider hidden />
+            <Card.Group>
+                {evaluationMetric?.questions.map(metric =>
+                    <Card>
+                        <Card.Content>
+                            <Card.Header>{metric.question}</Card.Header>
+                            <Card.Meta>
+                                <span>{metric.answer_type}</span>
+                            </Card.Meta>
+
+                        </Card.Content>
+                    </Card>)}
+            </Card.Group>
             <Divider />
             <Segment clearing vertical>
                 <Header floated='left' >Nominated Reviewers</Header>
