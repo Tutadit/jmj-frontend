@@ -3,11 +3,16 @@ import React from "react";
 import {
     Switch,
     Route,
-    useRouteMatch
-  } from "react-router-dom";
+    useRouteMatch,
+    Redirect
+} from "react-router-dom";
+import ViewPapers from "../Researcher/components/ViewPapers";
+import ViewPaper from "../Researcher/components/ViewPaper";
 
-import Home from "./components/Home";
+
 import Navigation from "./components/Navigation";
+import PublicationsList from "../Admin/components/PublicationsList";
+import ViewPublication from "../Admin/components/ViewPublication";
 
 import './index.css';
 
@@ -21,15 +26,26 @@ const Reviewer = () => {
             <div className="ui container middle">
                 <Switch>
                     <Route exact path={path}>
-                        <Home />
+                        <Redirect to={`${path}/papers`} />
                     </Route>
-                    <Route path={`${path}/example`}>
-                        Make it go
+                    <Route exact path={`${path}/papers`}>
+                        <ViewPapers />
+                    </Route>
+                    <Route path={`${path}/papers/:id/view`}>
+                        <ViewPaper />
+                    </Route>
+
+                    <Route exact path={`${path}/publications`}>
+                        <PublicationsList />
+                    </Route>
+
+                    <Route path={`${path}/publications/:id`}>
+                        <ViewPublication />
                     </Route>
                 </Switch>
             </div>
-        </div>       
-    );  
+        </div>
+    );
 };
 
 export default Reviewer;

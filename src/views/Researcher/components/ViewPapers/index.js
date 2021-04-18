@@ -15,9 +15,14 @@ import {
      Link
  } from 'react-router-dom'
 
+ import { useSelector } from 'react-redux';
+ import { selectUser } from '../../../../store/selectors/user'
+
 import API from '../../../../utils/API';
 
 const ViewPapers = () => {
+
+    const user = useSelector(selectUser);
 
     const [ fetchPapers, setFetchPapers ] = useState(true);
     const [ papers, setPapers] = useState(null)
@@ -47,7 +52,10 @@ const ViewPapers = () => {
     return (
         <Container className='view-papers'>
             <Segment clearing vertical>
-                <Header floated='left'>My Papers</Header>
+                <Header floated='left'>
+                    My Papers { user.type === 'reviewer' && 'to review'}
+                </Header>
+                { user.type === 'researcher' && 
                 <Button floated='right'
                         primary 
                         as={Link}
@@ -56,13 +64,17 @@ const ViewPapers = () => {
                         labelPosition='left'>
                     <Icon name='plus' />
                     Submit a paper
-                </Button>
+                </Button> }
             </Segment>
             <Table celled>
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Title</Table.HeaderCell>
+                        { user.type === 'reviewer' ? <>
+                        <Table.HeaderCell>Minor Review Deadline</Table.HeaderCell> 
+                        <Table.HeaderCell>Major Review Deadline</Table.HeaderCell> </>: 
                         <Table.HeaderCell>Status</Table.HeaderCell>
+                        }
                         <Table.HeaderCell>File</Table.HeaderCell>
                         <Table.HeaderCell>Action</Table.HeaderCell>
                     </Table.Row>
@@ -71,7 +83,11 @@ const ViewPapers = () => {
                     { papers.map(paper => 
                         <Table.Row key={paper.id}>
                             <Table.Cell>{paper.title}</Table.Cell>
-                            <Table.Cell>{paper.status}</Table.Cell>
+                            { user.type === 'reviewer' ? <>
+                            <Table.Cell>{paper.minor_rev_deadline}</Table.Cell>
+                            <Table.Cell>{paper.major_rev_deadline}</Table.Cell>
+                            </>:
+                            <Table.Cell>{paper.status}</Table.Cell>}
                             <Table.Cell textAlign="center">
                                 <Button secondary
                                     icon
@@ -87,16 +103,17 @@ const ViewPapers = () => {
                             <Table.Cell textAlign='center'>
                                 <Button primary 
                                         as={Link}
-                                        to={`/researcher/papers/${paper.id}/view`}
+                                        to={`/${user.type}/papers/${paper.id}/view`}
                                         icon>
                                     <Icon name='eye' />
                                 </Button>
+                                { user.type === 'researcher' && 
                                 <Button secondary
                                         as={Link}
                                         to={`/researcher/papers/${paper.id}/edit`}
                                         icon>
                                     <Icon name='pencil' />
-                                </Button>
+                                </Button>}
                             </Table.Cell>
                         </Table.Row>
                     )}

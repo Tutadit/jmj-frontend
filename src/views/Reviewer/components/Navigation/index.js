@@ -14,11 +14,11 @@ const ReviewerNavigation = ({url}) => {
         <Menu>
             <Menu.Item exact to={`${url}`}
                 as={NavLink}>
-                Home
+                My Papers to review
             </Menu.Item>
-            <Menu.Item exact to={`${url}/example`}
+            <Menu.Item exact to={`${url}/publications`}
                 as={NavLink}>
-                Example
+                Publications
             </Menu.Item>
             <UserNav />
         </Menu>   
