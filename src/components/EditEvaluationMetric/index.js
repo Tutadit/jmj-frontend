@@ -175,7 +175,7 @@ const EditEvaluationMetric = () => {
                 }
             </Segment>
 
-            { (metrics && metrics.length > 0)
+            { (!newEM && metrics && metrics.length > 0)
                 ? <>
                     <Segment clearing vertical>
                         <Button primary icon
@@ -253,7 +253,7 @@ const EditEvaluationMetric = () => {
                                 </Table.Row>)}
                         </Table.Body>
                     </Table>
-                </> :
+                </> : !newEM &&
                 <Message>
                     There are no questions for this metric
                     <Button primary icon
