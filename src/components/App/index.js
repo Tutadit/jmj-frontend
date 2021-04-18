@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../store/selectors/user"
 
-import { Menu } from 'semantic-ui-react';
+import { Menu, Segment } from 'semantic-ui-react';
 
 import {
     Switch,
@@ -82,6 +82,10 @@ const App = () => {
                 "/reviewer/user/tokens"]}>
                 <UserTokens />
             </PrivateRoute>
+            <Segment inverted attached='bottom'
+                    className='footer'>
+                Juan Mo Journals
+            </Segment>
         </>     
     );  
 };

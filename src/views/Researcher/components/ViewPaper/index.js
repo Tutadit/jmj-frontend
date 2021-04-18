@@ -27,6 +27,7 @@ const ViewPaper = () => {
     const [ paper, setPaper ] = useState(null);
     const [ nominated, setNominated ] = useState(null);
     const [ viewPaper, setViewPaper ] = useState(false);
+    const [ assigned, setAssigned] = useState(null);
 
     useEffect(() => {
         if(fetchPaper) {
@@ -37,6 +38,8 @@ const ViewPaper = () => {
                 }
                 if (response.data.nominated)
                     setNominated(response.data.nominated);
+                if (response.data.assigned)
+                    setAssigned(response.data.assigned);
             }).catch(error => {
                 
             })
@@ -74,6 +77,10 @@ const ViewPaper = () => {
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>Editor</Table.Cell>
+                        <Table.Cell>{paper.editor}</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.Cell>Editor email</Table.Cell>
                         <Table.Cell>{paper.editor_email}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
@@ -103,17 +110,39 @@ const ViewPaper = () => {
             <Table>
                 <Table.Header>
                     <Table.Row>
+                        <Table.HeaderCell>Reviewer</Table.HeaderCell>   
                         <Table.HeaderCell>Reviewer Email</Table.HeaderCell>   
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>                   
                     {nominated && nominated.map(nominee => 
                         <Table.Row key={nominee.id}>
+                            <Table.Cell>{nominee.reviewer}</Table.Cell>
                             <Table.Cell>{nominee.reviewer_email}</Table.Cell>
                         </Table.Row>
                     )}
                 </Table.Body>
-                </Table>
+            </Table>
+            <Divider />
+            <Segment clearing vertical>
+                <Header floated='left' >Assigned Reviewers</Header>
+            </Segment>
+            <Table>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.HeaderCell>Reviewer</Table.HeaderCell>   
+                        <Table.HeaderCell>Reviewer Email</Table.HeaderCell>   
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>                   
+                    {assigned && assigned.map(nominee => 
+                        <Table.Row key={nominee.id}>
+                            <Table.Cell>{nominee.reviewer}</Table.Cell>
+                            <Table.Cell>{nominee.reviewer_email}</Table.Cell>
+                        </Table.Row>
+                    )}
+                </Table.Body>
+            </Table>
             <Modal
                 dimmer='inverted'
                 onClose={() => setViewPaper(false)}
