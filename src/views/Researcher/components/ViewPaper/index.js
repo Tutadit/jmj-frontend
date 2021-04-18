@@ -11,7 +11,8 @@ import {
     Divider,
     Modal,
     Embed,
-    Message
+    Message,
+    Card
 } from 'semantic-ui-react'
 
 import {
@@ -30,6 +31,7 @@ const ViewPaper = () => {
     const [viewPaper, setViewPaper] = useState(false);
     const [assigned, setAssigned] = useState(null);
     const [withdraw, setWithdraw] = useState(false);
+    const [evaluationMetric, setEvaluationMetric] = useState(null);
 
     useEffect(() => {
         if (fetchPaper) {
@@ -44,6 +46,8 @@ const ViewPaper = () => {
                     setAssigned(response.data.assigned);
                 if (response.data.withdraw)
                     setWithdraw(response.data.withdraw);
+                if (response.data.evaluation_metric)
+                    setEvaluationMetric(response.data.evaluation_metric)
             }).catch(error => {
 
             })
@@ -66,7 +70,19 @@ const ViewPaper = () => {
         )
     return (
         <Container>
-            
+            { withdraw &&
+                <Message color='yellow'>
+                    {withdraw === 'awaiting' ?
+                        <>
+                            <Icon name='exclamation' /> The author of this paper has requested a withdrawl.
+                        </>
+                        : <>
+
+                            <Icon name='exclamation' /> The withdrawl request has been rejected.
+                            <Button secondary size='small' onClick={e => confirmRejection()}>Ok :(</Button>
+
+                        </>}
+                </Message>}
             <Segment clearing vertical>
                 <Header floated='left' >Paper Info</Header>
                 <Button floated='right'
@@ -99,10 +115,6 @@ const ViewPaper = () => {
                         <Table.Cell>{paper.editor_email}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
-                        <Table.Cell>Evaluation Metric</Table.Cell>
-                        <Table.Cell>{paper.em_name}</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
                         <Table.Cell>File</Table.Cell>
                         <Table.Cell>
                             <Button secondary
@@ -118,6 +130,23 @@ const ViewPaper = () => {
                     </Table.Row>
                 </Table.Body>
             </Table>
+            <Divider />
+            <Segment clearing vertical>
+                <Header>Evaluation Metric: {evaluationMetric?.name}</Header>
+            </Segment>
+            <Divider hidden />
+            <Card.Group>
+                {evaluationMetric?.questions.map(metric =>
+                    <Card>
+                        <Card.Content>
+                            <Card.Header>{metric.question}</Card.Header>
+                            <Card.Meta>
+                                <span>{metric.answer_type}</span>
+                            </Card.Meta>
+
+                        </Card.Content>
+                    </Card>)}
+            </Card.Group>
             <Divider />
             <Segment clearing vertical>
                 <Header floated='left' >Nominated Reviewers</Header>

@@ -44,7 +44,6 @@ const EditEvaluationMetric = () => {
     const [metrics, setMetrics] = useState(null);
 
     const [changed, setChanged] = useState(false);
-    const [error, setError] = useState({});
     const [newCounter, setNewCounter] = useState(0);
 
     const newEM = id === 'new';
@@ -72,8 +71,7 @@ const EditEvaluationMetric = () => {
             if (newEM)
                 history.replace(`/${user.type}/evaluation_metrics/${response.data.evaluation_metric.id}/edit`)
         }).catch(err => {
-            if (err.response.data.errors)
-                setError(err.response.data.errors)
+            
         })
     }
 
