@@ -11,7 +11,8 @@ import {
     Divider,
     Form,
     Modal,
-    Embed
+    Embed,
+    Message
 } from 'semantic-ui-react'
 
 import {
@@ -69,6 +70,9 @@ const EditPaper = () => {
 
                 if (response.data.assigned)
                     setAssigned(response.data.assigned);
+
+                if (response.data.withdraw)
+                    setWithdrawn(response.data.withdraw);
 
                 setFetchReviewers(true);
             }).catch(error => {
@@ -210,10 +214,10 @@ const EditPaper = () => {
                 setReviewer(null);
                 setNominateReviewer(false);
                 setNominated(nominated.filter(n => n.reviewer_id !== nominee.reviewer_id))
-                setReviewers([...reviewers, { 
-                    key:nominee.reviewer_email,
-                    text:nominee.reviewer,
-                    value:nominee.reviewer_email
+                setReviewers([...reviewers, {
+                    key: nominee.reviewer_email,
+                    text: nominee.reviewer,
+                    value: nominee.reviewer_email
                 }])
             }
         }).catch((error => {
@@ -224,7 +228,7 @@ const EditPaper = () => {
     const requestWidthrawal = () => {
         API.post(`/api/paper/${paper.id}/request_withdraw`).then(response => {
             if (response.data.success)
-                setWithdrawn(true);
+                setWithdrawn( !withdrawn ? 'awaiting' : false );
         }).catch(error => {
 
         })
@@ -236,6 +240,19 @@ const EditPaper = () => {
         )
     return (
         <Container>
+            { withdrawn &&
+                <Message color='yellow'>
+                    {withdrawn === 'awaiting' ?
+                        <>
+                            <Icon name='exclamation' /> The author of this paper has requested a withdrawl.
+                        </>
+                        : <>
+                            
+                            <Icon name='exclamation' /> The withdrawl request has been rejected.
+                            <Button secondary size='small' onClick={e => requestWidthrawal()}>Ok :(</Button>
+
+                        </>}
+                </Message>}
             <Segment clearing vertical>
                 <Header floated='left' >Paper Info</Header>
                 {withdrawn ?
@@ -260,6 +277,7 @@ const EditPaper = () => {
                         floated='right'
                         size='small'
                         onClick={(e) => requestWidthrawal()}>
+
                         <Icon name='undo' />
                         Request Withdrawal
                 </Button>}

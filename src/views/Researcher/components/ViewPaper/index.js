@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { 
+import {
     Container,
     Header,
     Button,
@@ -10,10 +10,11 @@ import {
     Loader,
     Divider,
     Modal,
-    Embed
- } from 'semantic-ui-react'
+    Embed,
+    Message
+} from 'semantic-ui-react'
 
-import { 
+import {
     Link,
     useParams
 } from 'react-router-dom'
@@ -21,16 +22,17 @@ import API from "../../../../utils/API";
 
 const ViewPaper = () => {
 
-    let {id} = useParams();
+    let { id } = useParams();
 
-    const [ fetchPaper, setFetchPaper ] = useState(true);
-    const [ paper, setPaper ] = useState(null);
-    const [ nominated, setNominated ] = useState(null);
-    const [ viewPaper, setViewPaper ] = useState(false);
-    const [ assigned, setAssigned] = useState(null);
+    const [fetchPaper, setFetchPaper] = useState(true);
+    const [paper, setPaper] = useState(null);
+    const [nominated, setNominated] = useState(null);
+    const [viewPaper, setViewPaper] = useState(false);
+    const [assigned, setAssigned] = useState(null);
+    const [withdraw, setWithdraw] = useState(false);
 
     useEffect(() => {
-        if(fetchPaper) {
+        if (fetchPaper) {
             setFetchPaper(false);
             API.get(`/api/paper/${id}`).then(response => {
                 if (response.data.paper) {
@@ -40,27 +42,52 @@ const ViewPaper = () => {
                     setNominated(response.data.nominated);
                 if (response.data.assigned)
                     setAssigned(response.data.assigned);
+                if (response.data.withdraw)
+                    setWithdraw(response.data.withdraw);
             }).catch(error => {
-                
+
             })
         }
     }, [fetchPaper, id])
 
-    if (!paper) 
+    const confirmRejection = e => {
+        API.post(`/api/paper/${id}/request_withdraw`).then(response => {
+            if (response.data.success) {
+                setWithdraw(false);
+            }
+        }).catch(error => {
+
+        })
+    }
+
+    if (!paper)
         return (
             <Container><Loader active inline='centered' /></Container>
         )
     return (
         <Container>
+            { withdraw &&
+                <Message color='yellow'>
+                    {withdraw === 'awaiting' ?
+                        <>
+                            <Icon name='exclamation' /> The author of this paper has requested a withdrawl.
+                        </>
+                        : <>
+                            
+                            <Icon name='exclamation' /> The withdrawl request has been rejected.
+                            <Button secondary size='small' onClick={confirmRejection}>Ok :(</Button>
+
+                        </>}
+                </Message>}
             <Segment clearing vertical>
                 <Header floated='left' >Paper Info</Header>
                 <Button floated='right'
-                        icon
-                        secondary
-                        to={`/researcher/papers/${id}/edit`}
-                        as={Link}
-                        labelPosition='left'
-                        size='small'>
+                    icon
+                    secondary
+                    to={`/researcher/papers/${id}/edit`}
+                    as={Link}
+                    labelPosition='left'
+                    size='small'>
                     <Icon name='plus' />
                     Edit Paper
                 </Button>
@@ -91,11 +118,11 @@ const ViewPaper = () => {
                         <Table.Cell>File</Table.Cell>
                         <Table.Cell>
                             <Button secondary
-                                    icon
-                                    onClick={e => {
-                                        setViewPaper(true);
-                                    }}
-                                    labelPosition='left'>
+                                icon
+                                onClick={e => {
+                                    setViewPaper(true);
+                                }}
+                                labelPosition='left'>
                                 <Icon name="file alternate" />
                                 View File
                             </Button>
@@ -110,12 +137,12 @@ const ViewPaper = () => {
             <Table>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>Reviewer</Table.HeaderCell>   
-                        <Table.HeaderCell>Reviewer Email</Table.HeaderCell>   
+                        <Table.HeaderCell>Reviewer</Table.HeaderCell>
+                        <Table.HeaderCell>Reviewer Email</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
-                <Table.Body>                   
-                    {nominated && nominated.map(nominee => 
+                <Table.Body>
+                    {nominated && nominated.map(nominee =>
                         <Table.Row key={nominee.id}>
                             <Table.Cell>{nominee.reviewer}</Table.Cell>
                             <Table.Cell>{nominee.reviewer_email}</Table.Cell>
@@ -130,12 +157,12 @@ const ViewPaper = () => {
             <Table>
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell>Reviewer</Table.HeaderCell>   
-                        <Table.HeaderCell>Reviewer Email</Table.HeaderCell>   
+                        <Table.HeaderCell>Reviewer</Table.HeaderCell>
+                        <Table.HeaderCell>Reviewer Email</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
-                <Table.Body>                   
-                    {assigned && assigned.map(nominee => 
+                <Table.Body>
+                    {assigned && assigned.map(nominee =>
                         <Table.Row key={nominee.id}>
                             <Table.Cell>{nominee.reviewer}</Table.Cell>
                             <Table.Cell>{nominee.reviewer_email}</Table.Cell>
@@ -151,29 +178,29 @@ const ViewPaper = () => {
                 size='fullscreen'>
                 <Segment clearing vertical padded>
                     <Container className='file-view-header'>
-                    <Button primary 
+                        <Button primary
                             floated='right'
                             onClick={(e) => {
                                 setViewPaper(false);
-                        }}>
+                            }}>
                             <Icon name='check' /> Done
                         </Button>
                         <Header textAlign='center'
-                                floated='left'>
-                            { paper?.title }
+                            floated='left'>
+                            {paper?.title}
                             <Header.Subheader>
                                 {paper?.researcher_email}
                             </Header.Subheader>
                         </Header>
                     </Container>
                 </Segment>
-                <Modal.Content>       
+                <Modal.Content>
                     <Embed
                         defaultActive
                         icon='right circle arrow'
                         placeholder='/images/image-16by9.png'
                         url={`http://localhost/storage/${paper?.file_path}`}
-                    />                    
+                    />
                 </Modal.Content>
             </Modal>
         </Container>
