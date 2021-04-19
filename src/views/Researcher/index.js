@@ -39,7 +39,7 @@ const Researcher = () => {
                     </Route>
 
                     <Route exact path={`${path}/publications`}>
-                        <PublicationsList noEdit />
+                        <PublicationsList />
                     </Route>
 
                     <Route path={`${path}/publications/:id`}>

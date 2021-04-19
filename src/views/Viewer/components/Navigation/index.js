@@ -12,7 +12,7 @@ const ViewerNavigation = ({url}) => {
 
     return (
         <Menu>
-            <Menu.Item to={`${url}`}
+            <Menu.Item to={`${url}/publications`}
                 as={NavLink}>
                 Publications
             </Menu.Item>

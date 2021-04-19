@@ -11,7 +11,9 @@ import {
     Divider,
     Form,
     Modal,
-    Embed
+    Embed,
+    Message,
+    Card
 } from 'semantic-ui-react'
 
 import {
@@ -19,6 +21,7 @@ import {
     useHistory
 } from 'react-router-dom'
 import API from "../../../../utils/API";
+import PaperStatus from "../../../../components/PaperStatus";
 
 const EditPaper = () => {
     let { id } = useParams();
@@ -54,6 +57,8 @@ const EditPaper = () => {
     const [reviewers, setReviewers] = useState(null);
     const [fetchReviewers, setFetchReviewers] = useState(false);
 
+    const [evaluationMetric, setEvaluationMetric] = useState(null);
+
     const newPaper = id === 'new'
 
     useEffect(() => {
@@ -70,6 +75,11 @@ const EditPaper = () => {
                 if (response.data.assigned)
                     setAssigned(response.data.assigned);
 
+                if (response.data.withdraw)
+                    setWithdrawn(response.data.withdraw);
+
+                if (response.data.evaluation_metric)
+                    setEvaluationMetric(response.data.evaluation_metric)
                 setFetchReviewers(true);
             }).catch(error => {
 
@@ -210,10 +220,10 @@ const EditPaper = () => {
                 setReviewer(null);
                 setNominateReviewer(false);
                 setNominated(nominated.filter(n => n.reviewer_id !== nominee.reviewer_id))
-                setReviewers([...reviewers, { 
-                    key:nominee.reviewer_email,
-                    text:nominee.reviewer,
-                    value:nominee.reviewer_email
+                setReviewers([...reviewers, {
+                    key: nominee.reviewer_email,
+                    text: nominee.reviewer,
+                    value: nominee.reviewer_email
                 }])
             }
         }).catch((error => {
@@ -224,7 +234,7 @@ const EditPaper = () => {
     const requestWidthrawal = () => {
         API.post(`/api/paper/${paper.id}/request_withdraw`).then(response => {
             if (response.data.success)
-                setWithdrawn(true);
+                setWithdrawn( !withdrawn ? 'awaiting' : false );
         }).catch(error => {
 
         })
@@ -236,9 +246,22 @@ const EditPaper = () => {
         )
     return (
         <Container>
+            { withdrawn &&
+                <Message color='yellow'>
+                    {withdrawn === 'awaiting' ?
+                        <>
+                            <Icon name='exclamation' /> The author of this paper has requested a withdrawl.
+                        </>
+                        : <>
+                            
+                            <Icon name='exclamation' /> The withdrawl request has been rejected.
+                            <Button secondary size='small' onClick={e => requestWidthrawal()}>Ok :(</Button>
+
+                        </>}
+                </Message>}
             <Segment clearing vertical>
                 <Header floated='left' >Paper Info</Header>
-                {withdrawn ?
+                {!newPaper && (withdrawn ?
                     <Button icon color='green'
                         labelPosition='left'
                         floated='right'
@@ -262,7 +285,7 @@ const EditPaper = () => {
                         onClick={(e) => requestWidthrawal()}>
                         <Icon name='undo' />
                         Request Withdrawal
-                </Button>}
+                </Button>)}
 
                 {Object.keys(changed).length > 0 &&
                     Object.keys(changed).reduce((acc, current) =>
@@ -301,7 +324,7 @@ const EditPaper = () => {
                                         content: error.title.join(' & '),
                                         pointing: 'left'
                                     }}
-                                    icon={changed?.title && {
+                                    icon={!newPaper && changed?.title && {
                                         name: 'save',
                                         circular: true,
                                         link: true,
@@ -313,7 +336,9 @@ const EditPaper = () => {
                     {!newPaper && <>
                         <Table.Row>
                             <Table.Cell>Status</Table.Cell>
-                            <Table.Cell>{paper.status}</Table.Cell>
+                            <Table.Cell>
+                                <PaperStatus status={paper.status} />
+                            </Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell>Editor</Table.Cell>
@@ -322,10 +347,6 @@ const EditPaper = () => {
                         <Table.Row>
                             <Table.Cell>Editor Email</Table.Cell>
                             <Table.Cell>{paper.editor_email}</Table.Cell>
-                        </Table.Row>
-                        <Table.Row>
-                            <Table.Cell>Evaluation Metric</Table.Cell>
-                            <Table.Cell>{paper.em_name}</Table.Cell>
                         </Table.Row>
                     </>}
                     <Table.Row>
@@ -347,7 +368,7 @@ const EditPaper = () => {
                                             }}
                                             type="file" />
                                     </Form.Field>
-                                    {changed.file && <Icon name='save'
+                                    {!newPaper && changed.file && <Icon name='save'
                                         circular
                                         link={true}
                                         onClick={e => saveField('file', paper.file_path)} />}
@@ -384,6 +405,24 @@ const EditPaper = () => {
                     </Table.Row>
                 </Table.Body>
             </Table>
+            { !newPaper && <>
+            <Divider />
+            <Segment clearing vertical>
+                <Header>Evaluation Metric: {evaluationMetric?.name}</Header>
+            </Segment>
+            <Divider hidden />
+            <Card.Group>
+                {evaluationMetric?.questions.map(metric =>
+                    <Card>
+                        <Card.Content>
+                            <Card.Header>{metric.question}</Card.Header>
+                            <Card.Meta>
+                                <span>{metric.answer_type}</span>
+                            </Card.Meta>
+
+                        </Card.Content>
+                    </Card>)}
+            </Card.Group>
             <Divider />
             <Segment clearing vertical>
                 <Header floated='left' >Nominated Reviewers</Header>
@@ -409,6 +448,7 @@ const EditPaper = () => {
                     Nominate Reviewer
                 </Button>}
             </Segment>
+            { ( nominated && nominated.length > 0 || nominateReviewer) ?
             <Table>
                 <Table.Header>
                     <Table.Row>
@@ -446,7 +486,7 @@ const EditPaper = () => {
                         </Table.Row>
                     )}
                 </Table.Body>
-            </Table>
+            </Table> : <Message color='yellow'>No nominations.</Message>}
             <Divider />
             <Segment clearing vertical>
                 <Header floated='left' >Assigned Reviewers</Header>
@@ -466,7 +506,7 @@ const EditPaper = () => {
                         </Table.Row>
                     )}
                 </Table.Body>
-            </Table>
+            </Table> </>}
             <Modal
                 dimmer='inverted'
                 onClose={() => setViewPaper(false)}

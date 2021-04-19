@@ -57,7 +57,8 @@ const Admin = () => {
 
                     <Route path={`${path}/withdrawls`}>
                         <ViewWithdrawls />
-                    </Route>
+                    </Route>                    
+
                 </Switch>
             </div>
         </div>       
