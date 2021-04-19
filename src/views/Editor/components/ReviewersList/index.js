@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import API from '../../../../utils/API';
 
-import { Table, Button, Icon, Modal, Header, Container } from "semantic-ui-react";
+import { Table, Button, Icon, Header} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 //import './index.css';
@@ -11,8 +11,6 @@ const ReviewersList = () => {
     // declare variables
     const [fetch, setFetch] = useState(true);
     const [ users, setUsers ] = useState([]);
-    const [ open, setOpen ] = useState(false);
-    const [ currentDelete, setCurrentDelete ] = useState(null);
 
     // fetch users method
     useEffect(() => {

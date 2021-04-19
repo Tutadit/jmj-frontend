@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import API from '../../../../utils/API';
 
-import { Table, Button, Icon, Modal, Header, Container, Segment } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Table, Button, Icon, Modal, Header, Container} from "semantic-ui-react";
 
 const SignupsList = () => {
     // declare variables
     const [fetch, setFetch] = useState(true);
-    const [ add, setAdd] = useState(false);
     const [ users, setUsers ] = useState([]);
     const [ open, setOpen ] = useState(false);
     const [ currentDelete, setCurrentDelete ] = useState(null);
-    const [ currentAdd, setCurrentAdd ] = useState(null);
 
     // fetch users method
     useEffect(() => {
@@ -30,7 +27,6 @@ const SignupsList = () => {
     const addUser = id => {
         API.post(`/api/users/${id}/change_status`).then((response) => {
             if (response.data.success) {
-                setCurrentAdd(null);
                 setUsers(users.filter(user => user.id !== id));
             }
         }).catch((error) => {
@@ -74,11 +70,6 @@ const SignupsList = () => {
                         <Table.Cell textAlign='center'>
                             <Button color='green' animated='vertical'
                                 onClick={(e) => {
-                                    setCurrentAdd({
-                                        firstname:user.first_name,
-                                        last_name:user.last_name,
-                                        id:user.id
-                                    });
                                     addUser(user.id);
                                 }}>
                                 <Button.Content hidden>Add</Button.Content>
