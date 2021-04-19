@@ -3,6 +3,7 @@ import API from '../../../../utils/API';
 import { Table, Button, Icon, Modal, Header, Container, Segment, 
     Embed, Loader, Divider, Card} from "semantic-ui-react";
 import { Link, useParams} from "react-router-dom";
+import PaperStatus from "../../../../components/PaperStatus";
 
 //import './index.css';
 
@@ -67,7 +68,9 @@ const PaperDetails = () => {
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>Status</Table.Cell>
-                        <Table.Cell>{paper.status}</Table.Cell>
+                        <Table.Cell>
+                            <PaperStatus status={paper.status} />
+                        </Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>Researcher Name</Table.Cell>
