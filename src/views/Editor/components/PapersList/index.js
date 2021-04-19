@@ -67,7 +67,9 @@ const PapersList = () => {
                                         <Icon name='eye' />
                                     </Button.Content>
                                 </Button>
-                                <Button tertiary animated='vertical'>
+                                <Button tertiary animated='vertical'
+                                        to={`/editor/papers/${paper.id}/edit`}
+                                        as={Link}>
                                     <Button.Content hidden>Edit</Button.Content>
                                     <Button.Content visible>
                                         <Icon name='pencil' />

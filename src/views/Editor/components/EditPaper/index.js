@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-import {Container, Header, Button, Segment, Icon, Table, Divider, Modal, Embed} from 'semantic-ui-react'
+import {Container, Header, Button, Segment, Icon, Table, Divider, Modal, Embed, Loader} from 'semantic-ui-react'
 import {useParams} from 'react-router-dom'
 import API from "../../../../utils/API";
+import PaperStatus from "../../../../components/PaperStatus"
 
 const EditPaper = () => {
     // varaibles
     let { id } = useParams();       // get id of current paper
 
     const [fetchPaper, setFetchPaper] = useState(true);         // initially fetch paper
-    const [paper, setPaper] = useState({
+    /*const [paper, setPaper] = useState({
         id: "",
         title: "",
         status: "",
@@ -18,15 +19,14 @@ const EditPaper = () => {
         editor: "",
         editor_id: "",
         editor_email: "",
-        researcher_email: "",
-        em_name: ""
-    });
-    const [nominated, setNominated] = useState(null);           // store nominated
-    const [assigned, setAssigned] = useState(null);             // store assigned
+        researcher_email: ""
+    });*/
+    const [paper, setPaper] = useState(null);
+    const [nominated, setNominated] = useState(null);                       // store nominated
+    const [deleteRevDetails, setDeleteRevDetails] = useState(null);         // store rev to delete details
+    const [assigned, setAssigned] = useState(null);                         // store assigned
 
     const [viewPaper, setViewPaper] = useState(false);                  // view paper pdf
-    const [approveNomiRev, setApproveNomiRev] = useState(null);         // store approved nominated rev
-    const [deleteRev, setDeleteRev] = useState(null);                   // store rev to reject/remove
 
     const [removeNomi, setRemoveNomi] = useState(false);            // remove nominated rev
     const [removeAssigned, setRemoveAssigned] = useState(false);    // remove assigned rev
@@ -51,7 +51,7 @@ const EditPaper = () => {
     }, [fetchPaper, id])
 
     // remove nominated/assigned reviewer
-    const removeRev = () => {
+    const removeRev = (deleteRev) => {
         if(removeNomi) {
             // remove nomi
             API.post(`/api/nominated/remove`, {
@@ -84,25 +84,23 @@ const EditPaper = () => {
     }
 
     // approve nominated reviewer
-    const approveNomiRevMethod = () => {
+    const approveNomiRevMethod = (approveNomiRev) => {
         // add to assign
         API.post('/api/assigned/new', {
-            paper_id: 1,//approveNomiRev.paper_id,
-            researcher_email: 'researcher1@mail.com',//approveNomiRev.researcher_email,
+            paper_id: approveNomiRev.paper_id,
+            researcher_email: approveNomiRev.researcher_email,
             reviewer_email: approveNomiRev.reviewer_email,
-            minor_rev_dealine: approveNomiRev.minor_rev_dealine,
-            major_rev_deadkine: approveNomiRev.major_rev_deadkine
+            revision_deadline: approveNomiRev.revision_deadline,
         }).then(respomse => {
             if (respomse.data.success) {
                 // remove from nomi
-                setDeleteRev({
+                setRemoveNomi(true);
+                removeRev({
                     name: '',
                     email: approveNomiRev.reviewer_email,
                     paper_id: approveNomiRev.paper_id,
                     user_id: 1
                 });
-                setRemoveNomi(true);
-                removeRev();
                 setFetchPaper(true);
             }
         }).catch((error => {
@@ -111,6 +109,14 @@ const EditPaper = () => {
     }
 
     // return 
+    if (!paper) {
+        return (
+            <Container>
+                <Loader />
+            </Container>
+        )
+    }
+
     return (
         <Container>
             <Segment clearing vertical>
@@ -124,7 +130,9 @@ const EditPaper = () => {
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>Status</Table.Cell>
-                        <Table.Cell>{paper.status}</Table.Cell>
+                        <Table.Cell>
+                            <PaperStatus status={paper.status} />
+                        </Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>Researcher</Table.Cell>
@@ -174,14 +182,12 @@ const EditPaper = () => {
                             <Table.Cell textAlign='center'>
                                 <Button color='green' animated='vertical'
                                         onClick={(e) => {
-                                            setApproveNomiRev({
+                                            approveNomiRevMethod({
                                                 paper_id: paper.id,
                                                 researcher_email: paper.researcher_email,
                                                 reviewer_email: nomi.reviewer_email,
-                                                minor_rev_dealine: '2021-01-02',
-                                                major_rev_deadkine: '2021-01-03',
-                                            })
-                                            approveNomiRevMethod();
+                                                revision_deadline: '2021-01-02'
+                                            });
                                         }}>
                                     <Button.Content hidden>Add</Button.Content>
                                     <Button.Content visible>
@@ -190,7 +196,7 @@ const EditPaper = () => {
                                 </Button>
                                 <Button color='red' animated='vertical'
                                         onClick={(e) => {
-                                            setDeleteRev({
+                                            setDeleteRevDetails({
                                                 name: nomi.reviewer,
                                                 email: nomi.reviewer_email,
                                                 paper_id: paper.id,
@@ -199,7 +205,7 @@ const EditPaper = () => {
                                             setRemoveNomi(true);
                                             setAction({
                                                 action: 'Are you sure you want to reject the nominated reviewer:'
-                                            })
+                                            });
                                             setOpenConfirmation(true);
                                         }}>
                                     <Button.Content hidden>Remove</Button.Content>
@@ -232,7 +238,7 @@ const EditPaper = () => {
                             <Table.Cell textAlign='center'>
                                 <Button color='red' animated='vertical'
                                         onClick={(e) => {
-                                            setDeleteRev({
+                                            setDeleteRevDetails({
                                                 name: assign.reviewer,
                                                 email: assign.reviewer_email,
                                                 user_id: assign.id,
@@ -296,7 +302,7 @@ const EditPaper = () => {
                 size='small'>
                 <Header icon textAlign='center'>
                     <Icon name='book' />
-                   {action?.action} {deleteRev?.name}
+                   {action?.action} {deleteRevDetails?.name}
                 </Header>
                 <Modal.Content>
                     <Container textAlign='center'>
@@ -310,7 +316,7 @@ const EditPaper = () => {
                         <Icon name='remove' /> No
                     </Button>
                     <Button color='red' inverted onClick={() => {
-                        removeRev()
+                        removeRev(deleteRevDetails);
                         setOpenConfirmation(false);
                     }}>
                         <Icon name='checkmark' /> Yes
