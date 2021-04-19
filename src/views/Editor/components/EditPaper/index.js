@@ -10,24 +10,13 @@ const EditPaper = () => {
     let { id } = useParams();       // get id of current paper
 
     const [fetchPaper, setFetchPaper] = useState(true);         // initially fetch paper
-    /*const [paper, setPaper] = useState({
-        id: "",
-        title: "",
-        status: "",
-        file_path: "",
-        researcher: "",
-        researcher_id: "",
-        editor: "",
-        editor_id: "",
-        editor_email: "",
-        researcher_email: ""
-    });*/
     const [paper, setPaper] = useState(null);
     const [nominated, setNominated] = useState(null);                       // store nominated
     const [deleteRevDetails, setDeleteRevDetails] = useState(null);         // store rev to delete details
     const [assigned, setAssigned] = useState(null);                         // store assigned
 
     const [viewPaper, setViewPaper] = useState(false);                  // view paper pdf
+    const [reviewers, setReviewers] = useState(null);
 
     const [removeNomi, setRemoveNomi] = useState(false);            // remove nominated rev
     const [removeAssigned, setRemoveAssigned] = useState(false);    // remove assigned rev
@@ -37,7 +26,9 @@ const EditPaper = () => {
     const [withdrawn, setWithdrawn] = useState(false);
     const [error, setError] = useState({});
     const [changed, setChanged] = useState({});
-    const newPaper = id === 'new'
+    const [fetchReviewers, setFetchReviewers] = useState(false);
+    const [nominateReviewer, setNominateReviewer] = useState(false);
+    const [reviewer, setReviewer] = useState(null);
 
     // fetch paper
     useEffect(() => {
@@ -48,7 +39,7 @@ const EditPaper = () => {
                     setPaper(response.data.paper);
                 if (response.data.nominated)
                     setNominated(response.data.nominated.map(nominee => 
-                        response.data.assigned.find(assinee => assinee.id===nominee.id) ? ({
+                        response.data.assigned.find(assinee => assinee.reviewer_id===nominee.reviewer_id) ? ({
                             ...nominee,
                             assigned: true
                         }):nominee));
@@ -58,11 +49,32 @@ const EditPaper = () => {
                     setWithdrawn(response.data.withdraw);
                 if (response.data.evaluation_metric)
                     setEvaluationMetric(response.data.evaluation_metric)
+                setFetchReviewers(true);
             }).catch((error) => {
                 console.error(error);
             })
         }
     }, [fetchPaper, id])
+
+    useEffect(() => {
+        if ( fetchReviewers) {
+            setFetchReviewers(false);
+            API.get(`/api/users/of_type/reviewer`).then(response => {
+                if (response.data.users) {
+                    setReviewers(response.data.users
+                        .filter(user => assigned.find(nominee => nominee.reviewer_email === user.email) === undefined)
+                        .filter(user => nominated.find(nominee => nominee.reviewer_email === user.email) === undefined)
+                        .map(user => ({
+                            key: user.email,
+                            text: user.first_name + ' ' + user.last_name,
+                            value: user.email
+                        })))
+                }
+            }).catch(error => {
+
+            })
+        }
+    }, [assigned, fetchReviewers, id, nominated])
 
     // remove nominated/assigned reviewer
     const removeRev = (deleteRev) => {
@@ -106,25 +118,7 @@ const EditPaper = () => {
             reviewer_email: approveNomiRev.reviewer_email,
             revision_deadline: approveNomiRev.revision_deadline,
         }).then(respomse => {
-            if (respomse.data.success) {
-                /*API.post(`/api/nominated/remove`, {
-                    paper_id: approveNomiRev.paper_id,
-                    reviewer_email: approveNomiRev.reviewer_email
-                }).then(response => {
-                    if (response.data.success) {
-                        setFetchPaper(true);
-                        setRemoveNomi(false);
-                    }
-                }).catch((error => {
-                    console.error(error.response);
-                }))*/
-
-                /*// remove from nomi
-                setRemoveNomi(true);
-                removeRev({
-                    paper_id: approveNomiRev.paper_id,
-                    email: approveNomiRev.reviewer_email
-                });*/
+            if (respomse.data.success) {               
                 setFetchPaper(true);
             }
         }).catch((error => {
@@ -138,16 +132,56 @@ const EditPaper = () => {
             [name]: value
         });
 
-        if (!newPaper)
-            setChanged({
-                ...changed,
-                [name]: value
-            })
-        else
-            setChanged({ new_journal: true });
+
+        setChanged({
+            ...changed,
+            [name]: value
+        })
     }
 
     const saveField = (name, value) => {
+        API.post(`/api/paper/${id}/edit`,{
+            [name]:value
+        }).then(response => {
+            if (response.data.success)
+                setChanged({
+                    ...changed,
+                    [name]: false
+                });
+                setPaper({
+                    ...paper,
+                    [name]:value
+                });
+        }).catch(err => {
+
+        })
+    }
+
+    const newNominatedReviewer = () => {
+        API.post(`/api/assigned/new`, 
+        {
+            paper_id: paper.id,
+            researcher_email: paper.researcher_email,
+            reviewer_email: reviewer,
+            revision_deadline: '2021-05-23',
+        }).then(response => {
+            if (response.data.success) {
+                setReviewer(null);
+                setNominateReviewer(false);
+                if (response.data.assigned) {
+                    setAssigned([...assigned, response.data.assigned]);
+                    console.log(reviewers)
+                    console.log(response.data.nominated)
+                    setReviewers(reviewers.filter(reviewer => reviewer.key !== response.data.assigned.reviewer_email))
+                }
+            }
+        }).catch((error => {
+            console.error(error.response);
+        }))
+    }
+
+    const handleReviewerChange = (e, { name, value }) => {
+        setReviewer(value);
     }
 
     // return 
@@ -179,7 +213,7 @@ const EditPaper = () => {
                                         content: error.title.join(' & '),
                                         pointing: 'left'
                                     }}
-                                    icon={!newPaper && changed?.title && {
+                                    icon={ changed?.title && {
                                         name: 'save',
                                         circular: true,
                                         link: true,
@@ -191,7 +225,8 @@ const EditPaper = () => {
                     <Table.Row>
                         <Table.Cell>Status</Table.Cell>
                         <Table.Cell>
-                            <PaperStatus status={paper.status} />
+                            <PaperStatus status={paper.status}
+                                        edit={(status) => saveField('status', status)} />
                         </Table.Cell>
                     </Table.Row>
                     <Table.Row>
@@ -296,6 +331,27 @@ const EditPaper = () => {
             <Divider />
             <Segment clearing vertical>
                 <Header floated='left' >Assigned Reviewers</Header>
+                {nominateReviewer ?
+                        <Button floated='right'
+                            icon
+                            color='green'
+                            onClick={e => newNominatedReviewer()}
+                            labelPosition='left'
+                            size='small'>
+                            <Icon name='save' />
+                    Assign this reviewer
+                </Button>
+                        :
+
+                        <Button floated='right'
+                            icon
+                            primary
+                            onClick={e => setNominateReviewer(true)}
+                            labelPosition='left'
+                            size='small'>
+                            <Icon name='plus' />
+                    Assign Reviewer
+                </Button>}
             </Segment>
             <Table celled >
                 <Table.Header>
@@ -306,6 +362,19 @@ const EditPaper = () => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
+                    {nominateReviewer && <Table.Row>
+                        <Table.Cell>
+                            <Form.Select placeholder="Reviewer"
+                                name="reviewer"
+                                search
+                                value={reviewer}
+                                onChange={handleReviewerChange}
+                                options={reviewers} />
+                        </Table.Cell>
+                        <Table.Cell>
+                            {reviewer && reviewer}
+                        </Table.Cell>
+                    </Table.Row>}
                     {assigned && assigned.map(assign => 
                         <Table.Row key={assign.id}>
                             <Table.Cell>{assign.reviewer}</Table.Cell>

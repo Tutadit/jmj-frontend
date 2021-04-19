@@ -448,7 +448,7 @@ const EditPaper = () => {
                     Nominate Reviewer
                 </Button>}
             </Segment>
-            { ( nominated && nominated.length > 0 || nominateReviewer) ?
+            { ( (nominated && nominated.length > 0) || nominateReviewer) ?
             <Table>
                 <Table.Header>
                     <Table.Row>
