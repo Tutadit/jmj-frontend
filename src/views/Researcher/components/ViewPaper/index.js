@@ -14,7 +14,8 @@ import {
     Message,
     Card,
     Form,
-    TextArea
+    TextArea,
+    Step
 } from 'semantic-ui-react'
 
 import {
@@ -25,6 +26,7 @@ import API from "../../../../utils/API";
 
 import { useSelector } from 'react-redux';
 import { selectUser } from "../../../../store/selectors/user"
+import PaperStatus from "../../../../components/PaperStatus";
 
 const ViewPaper = () => {
 
@@ -180,16 +182,19 @@ const ViewPaper = () => {
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>Status</Table.Cell>
-                        <Table.Cell>{paper.status}</Table.Cell>
+                        <Table.Cell>
+                            <PaperStatus status={paper.status} />
+                        </Table.Cell>
                     </Table.Row>
+                    { paper.editor && <>
                     <Table.Row>
                         <Table.Cell>Editor</Table.Cell>
                         <Table.Cell>{paper.editor}</Table.Cell>
-                    </Table.Row>
+                    </Table.Row> 
                     <Table.Row>
                         <Table.Cell>Editor email</Table.Cell>
                         <Table.Cell>{paper.editor_email}</Table.Cell>
-                    </Table.Row>
+                    </Table.Row> </>}
                     {user.type === 'reviewer' && <>
                         <Table.Row>
                             <Table.Cell>Researcher</Table.Cell>
@@ -216,6 +221,7 @@ const ViewPaper = () => {
                     </Table.Row>
                 </Table.Body>
             </Table>
+            { evaluationMetric && evaluationMetric.questions && evaluationMetric.questions.length > 0 && <>
             <Divider />
             <Segment clearing vertical>
                 <Header>Evaluation Metric: {evaluationMetric?.name}</Header>
@@ -262,7 +268,8 @@ const ViewPaper = () => {
                             </>}
                         </Card.Content>
                     </Card>)}
-            </Card.Group>
+            </Card.Group> </> }
+            { reviews && reviews.length > 0 && <>
             <Divider />
             <Segment clearing vertical>
                 <Header>Reviews:</Header>
@@ -281,7 +288,8 @@ const ViewPaper = () => {
                             {review.answer}
                         </Card.Content>
                     </Card>)}
-            </Card.Group>
+            </Card.Group> </> }
+            { nominated && nominated.length > 0 && <>
             <Divider />
             <Segment clearing vertical>
                 <Header floated='left' >Nominated Reviewers</Header>
@@ -301,7 +309,8 @@ const ViewPaper = () => {
                         </Table.Row>
                     )}
                 </Table.Body>
-            </Table>
+            </Table></>}
+            { assigned && assigned.length > 0 && <>
             <Divider />
             <Segment clearing vertical>
                 <Header floated='left' >Assigned Reviewers</Header>
@@ -321,7 +330,7 @@ const ViewPaper = () => {
                         </Table.Row>
                     )}
                 </Table.Body>
-            </Table>
+            </Table> </> }
             <Modal
                 dimmer='inverted'
                 onClose={() => setViewPaper(false)}

@@ -21,6 +21,7 @@ import {
     useHistory
 } from 'react-router-dom'
 import API from "../../../../utils/API";
+import PaperStatus from "../../../../components/PaperStatus";
 
 const EditPaper = () => {
     let { id } = useParams();
@@ -260,7 +261,7 @@ const EditPaper = () => {
                 </Message>}
             <Segment clearing vertical>
                 <Header floated='left' >Paper Info</Header>
-                {withdrawn ?
+                {!newPaper && (withdrawn ?
                     <Button icon color='green'
                         labelPosition='left'
                         floated='right'
@@ -282,10 +283,9 @@ const EditPaper = () => {
                         floated='right'
                         size='small'
                         onClick={(e) => requestWidthrawal()}>
-
                         <Icon name='undo' />
                         Request Withdrawal
-                </Button>}
+                </Button>)}
 
                 {Object.keys(changed).length > 0 &&
                     Object.keys(changed).reduce((acc, current) =>
@@ -324,7 +324,7 @@ const EditPaper = () => {
                                         content: error.title.join(' & '),
                                         pointing: 'left'
                                     }}
-                                    icon={changed?.title && {
+                                    icon={!newPaper && changed?.title && {
                                         name: 'save',
                                         circular: true,
                                         link: true,
@@ -336,7 +336,9 @@ const EditPaper = () => {
                     {!newPaper && <>
                         <Table.Row>
                             <Table.Cell>Status</Table.Cell>
-                            <Table.Cell>{paper.status}</Table.Cell>
+                            <Table.Cell>
+                                <PaperStatus status={paper.status} />
+                            </Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell>Editor</Table.Cell>
@@ -366,7 +368,7 @@ const EditPaper = () => {
                                             }}
                                             type="file" />
                                     </Form.Field>
-                                    {changed.file && <Icon name='save'
+                                    {!newPaper && changed.file && <Icon name='save'
                                         circular
                                         link={true}
                                         onClick={e => saveField('file', paper.file_path)} />}
@@ -403,6 +405,7 @@ const EditPaper = () => {
                     </Table.Row>
                 </Table.Body>
             </Table>
+            { !newPaper && <>
             <Divider />
             <Segment clearing vertical>
                 <Header>Evaluation Metric: {evaluationMetric?.name}</Header>
@@ -445,6 +448,7 @@ const EditPaper = () => {
                     Nominate Reviewer
                 </Button>}
             </Segment>
+            { ( nominated && nominated.length > 0 || nominateReviewer) ?
             <Table>
                 <Table.Header>
                     <Table.Row>
@@ -482,7 +486,7 @@ const EditPaper = () => {
                         </Table.Row>
                     )}
                 </Table.Body>
-            </Table>
+            </Table> : <Message color='yellow'>No nominations.</Message>}
             <Divider />
             <Segment clearing vertical>
                 <Header floated='left' >Assigned Reviewers</Header>
@@ -502,7 +506,7 @@ const EditPaper = () => {
                         </Table.Row>
                     )}
                 </Table.Body>
-            </Table>
+            </Table> </>}
             <Modal
                 dimmer='inverted'
                 onClose={() => setViewPaper(false)}

@@ -6,7 +6,8 @@ import {
     Header,
     Button,
     Icon,
-    Card
+    Card,
+    Divider
 } from 'semantic-ui-react'
 
 import {
@@ -54,6 +55,7 @@ const EvaluationMetrics = () => {
                     New Evaluation Metric
                 </Button>
             </Segment>
+            <Divider hidden />
             <Card.Group>
                 {evaluationMetrics && evaluationMetrics.map(em =>
                     <Card>
