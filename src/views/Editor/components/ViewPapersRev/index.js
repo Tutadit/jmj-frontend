@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import API from '../../../../utils/API';
 
-import { Container, Header, Loader, Table, Icon, Button, Segment, Modal, Embed} from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Container, Header, Table, Icon, Button, Segment, Modal, Embed} from "semantic-ui-react";
 
 import './index.css';
 
@@ -11,12 +10,9 @@ const ViewPapersRev = () => {
 
     // create variables
     const [fetch, setFetch] = useState(true);
-    const [ assigned, setAssigned] = useState([]);
-    //const [ assigned, setAssigned] = useState([]);
-    const [ open, setOpen ] = useState(false);
-    const [ currentDelete, setCurrentDelete ] = useState(null);
-    const [ viewPaper, setViewPaper ] = useState(false);
-    const [ paper, setPaper ] = useState(null);
+    const [assigneds, setAssigneds] = useState([]);
+    const [assign, setAssign] = useState(null);
+    const [viewAssign, setViewAssign] = useState(false);
     let {id} = useParams();   // func = hook
 
     // fetch all papers by the researcher
@@ -24,13 +20,13 @@ const ViewPapersRev = () => {
         if(fetch) {
             setFetch(false);
             API.get(`/api/assigned/reviewer/${id}`).then(response => {
-                if (response.data.assigned)
-                    setAssigned(response.data.assigned);
+                if (response.data.assigneds)
+                    setAssigneds(response.data.assigneds);
             }).catch(error => {
                 console.log(error);
             })
         }
-    },[fetch]);
+    },[fetch, id]);
 
     // return 
     return (
@@ -40,36 +36,75 @@ const ViewPapersRev = () => {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Paper Id</Table.HeaderCell>
+                        <Table.HeaderCell>Title</Table.HeaderCell>
+                        <Table.HeaderCell>Status</Table.HeaderCell>
                         <Table.HeaderCell>Researcher Email</Table.HeaderCell>
-                        <Table.HeaderCell>Reviewer Email</Table.HeaderCell>
-                        <Table.HeaderCell>Major Revision Deadline</Table.HeaderCell>
                         <Table.HeaderCell>Minor Revision Deadline</Table.HeaderCell>
+                        <Table.HeaderCell>Major Revision Deadline</Table.HeaderCell>
                         <Table.HeaderCell>Actions</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {assigned.map(assign => <Table.Row key={assign.id}>
-                            <Table.Cell>{assign.id}</Table.Cell>
+                    {assigneds.map(assign => <Table.Row key={assign.id}>
+                            <Table.Cell>{assign.paper_id}</Table.Cell>
+                            <Table.Cell>{assign.title}</Table.Cell>
+                            <Table.Cell>{assign.status}</Table.Cell>
                             <Table.Cell>{assign.researcher_email}</Table.Cell>
-                            <Table.Cell>{assign.reviewer_email}</Table.Cell>
                             <Table.Cell>{assign.minor_rev_deadline}</Table.Cell>
                             <Table.Cell>{assign.major_rev_deadline}</Table.Cell>
                             <Table.Cell>
                                 <Button secondary
                                         icon
                                         onClick={e => {
-                                            setPaper(paper)
-                                            setViewPaper(true);
+                                            setAssign(assign)
+                                            setViewAssign(true);
                                         }}
                                         labelPosition='center'>
                                     <Icon name="file alternate" />
-                                    View File
+                                    {assign.file_path}
                                 </Button>                                
                             </Table.Cell>
                         </Table.Row>)}
                 </Table.Body>
             </Table>
-        </Container>      
+
+            <Modal
+                dimmer='inverted'
+                onClose={() => setViewAssign(false)}
+                onOpen={() => setViewAssign(true)}
+                open={viewAssign}
+                size='fullscreen'>
+                <Segment clearing vertical padded>
+                    <Container className='file-view-header'>
+                    <Button primary 
+                            floated='right'
+                            onClick={(e) => {
+                                setViewAssign(false);
+                                setAssign(null);
+                        }}>
+                            <Icon name='check' /> Done
+                        </Button>
+                        <Header textAlign='center'
+                                floated='left'>
+                            { assign?.title }
+                            <Header.Subheader>
+                                {assign?.researcher_email}
+                            </Header.Subheader>
+                        </Header>
+                    </Container>
+                </Segment>
+                <Modal.Content>       
+                    <Embed
+                        defaultActive
+                        icon='right circle arrow'
+                        placeholder='/images/image-16by9.png'
+                        url={`http://localhost/storage/${assign?.file_path}`}
+                    />                    
+                </Modal.Content>
+            </Modal> 
+
+        </Container>  
+
     );  
 };
 

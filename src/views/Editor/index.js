@@ -19,11 +19,14 @@ import ViewSignup from "./components/ViewSignup"
 
 import ViewPapersRes from "./components/ViewPapersRes"
 import ViewPapersRev from "./components/ViewPapersRev"
+import PaperDetails from "./components/PaperDetails";
+import EditPaper from "./components/EditPaper";
 
-import './index.css';
 import ViewPublication from "../Admin/components/ViewPublication";
 import EditPublication from "../Admin/components/EditPublication";
 import PublicationsList from "../Admin/components/PublicationsList";
+
+import './index.css';
 
 const Editor = () => {
 
@@ -42,6 +45,15 @@ const Editor = () => {
                     
                     <Route exact path={`${path}/papers`}>
                         <PapersList />
+                    </Route>
+                    <Route exact path={`${path}/papers/:id`}>
+                        <Redirect to={`${path}/papers/:id/details`} />
+                    </Route>
+                    <Route path={`${path}/papers/:id/details`}>
+                        <PaperDetails />
+                    </Route>
+                    <Route path={`${path}/papers/:id/edit`}>
+                        <EditPaper />
                     </Route>
                     
                     

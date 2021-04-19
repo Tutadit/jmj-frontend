@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import API from '../../../../utils/API';
-import { Container, Header, Loader, Table, Icon, Button, } from 'semantic-ui-react';
+import { Container, Header, Loader, Table} from 'semantic-ui-react';
 
 //import './index.css';
 
@@ -11,9 +11,7 @@ const ViewReviewer = () => {
     let { id } = useParams();
 
     const [fetch, setFetch ] = useState(true);
-    const [fetchDegrees, setFetchDegrees ] = useState(false);
     const [ user, setUser ] = useState(null);
-    const [ degrees, setDegrees ] = useState([]);
 
     // fetch user method
     useEffect(() => {
@@ -22,9 +20,6 @@ const ViewReviewer = () => {
             API.get(`/api/users/${id}`).then((response) => {
                 if (response.data.user) {
                     setUser(response.data.user);
-
-                    if (response.data.user.type === 'researcher')
-                        setFetchDegrees(true);
                 }
 
             }).catch((error) => {
@@ -32,20 +27,6 @@ const ViewReviewer = () => {
             })
         }
     },[fetch, id]);
-
-    // fetch degrees TODO: wont't be used
-    useEffect(() => {
-        if (fetchDegrees && user?.type === 'researcher') {
-            setFetchDegrees(false);
-            API.get(`/api/users/${id}/degrees`).then((response => {
-                if (response.data.degrees)
-                    setDegrees(response.data.degrees);
-            })).catch((err) => {
-
-            })
-        }
-
-    }, [user, fetchDegrees, id]);
 
     // loading
     if (!user)
