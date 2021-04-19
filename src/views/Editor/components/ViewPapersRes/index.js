@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import API from '../../../../utils/API';
-
-import { Container, Header, Table, Icon, Button, Segment, Modal, Embed} from "semantic-ui-react";
+import { Link} from "react-router-dom";
+import { Container, Header, Table, Icon, Button, Segment, Modal, 
+    Loader, Embed} from "semantic-ui-react";
 
 import './index.css';
 
@@ -29,6 +30,14 @@ const ViewPapersRes = () => {
     },[fetch, id]);
 
     // return 
+    if (!papers) {
+        return (
+            <Container>
+                <Loader />
+            </Container>
+        )
+    }
+
     return (
         <Container className="view-papers-res">
             <Header floated='left'>View Papers By Researcher</Header>
@@ -39,6 +48,7 @@ const ViewPapersRes = () => {
                         <Table.HeaderCell>Title</Table.HeaderCell>
                         <Table.HeaderCell>Status</Table.HeaderCell>
                         <Table.HeaderCell>File</Table.HeaderCell>
+                        <Table.HeaderCell>Actions</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -57,6 +67,24 @@ const ViewPapersRes = () => {
                                     <Icon name="file alternate" />
                                     {paper.file_path}
                                 </Button>                                
+                            </Table.Cell>
+                            <Table.Cell textAlign='center'>
+                                <Button primary animated='vertical'
+                                        to={`/editor/papers/${paper.id}/details`}
+                                        as={Link}>
+                                    <Button.Content hidden>View</Button.Content>
+                                    <Button.Content visible>
+                                        <Icon name='eye' />
+                                    </Button.Content>
+                                </Button>
+                                <Button tertiary animated='vertical'
+                                        to={`/editor/papers/${paper.id}/edit`}
+                                        as={Link}>
+                                    <Button.Content hidden>Edit</Button.Content>
+                                    <Button.Content visible>
+                                        <Icon name='pencil' />
+                                    </Button.Content>
+                                </Button>
                             </Table.Cell>
                         </Table.Row>)}
                 </Table.Body>

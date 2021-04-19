@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import {Container, Header, Button, Segment, Icon, Table, Divider, Modal, Embed, Loader} from 'semantic-ui-react'
+import {Container, Header, Button, Segment, Icon, Table, Divider, Modal, 
+    Embed, Loader, Card, Form} from 'semantic-ui-react'
 import {useParams} from 'react-router-dom'
 import API from "../../../../utils/API";
 import PaperStatus from "../../../../components/PaperStatus"
@@ -32,6 +33,11 @@ const EditPaper = () => {
     const [removeAssigned, setRemoveAssigned] = useState(false);    // remove assigned rev
     const [action, setAction] = useState(null);
     const [openConfirmation, setOpenConfirmation] = useState(false);
+    const [evaluationMetric, setEvaluationMetric] = useState(null);
+    const [withdrawn, setWithdrawn] = useState(false);
+    const [error, setError] = useState({});
+    const [changed, setChanged] = useState({});
+    const newPaper = id === 'new'
 
     // fetch paper
     useEffect(() => {
@@ -41,9 +47,17 @@ const EditPaper = () => {
                 if (response.data.paper)
                     setPaper(response.data.paper);
                 if (response.data.nominated)
-                    setNominated(response.data.nominated);
+                    setNominated(response.data.nominated.map(nominee => 
+                        response.data.assigned.find(assinee => assinee.id===nominee.id) ? ({
+                            ...nominee,
+                            assigned: true
+                        }):nominee));
                 if (response.data.assigned)
                     setAssigned(response.data.assigned);
+                if (response.data.withdraw)
+                    setWithdrawn(response.data.withdraw);
+                if (response.data.evaluation_metric)
+                    setEvaluationMetric(response.data.evaluation_metric)
             }).catch((error) => {
                 console.error(error);
             })
@@ -93,19 +107,47 @@ const EditPaper = () => {
             revision_deadline: approveNomiRev.revision_deadline,
         }).then(respomse => {
             if (respomse.data.success) {
-                // remove from nomi
+                /*API.post(`/api/nominated/remove`, {
+                    paper_id: approveNomiRev.paper_id,
+                    reviewer_email: approveNomiRev.reviewer_email
+                }).then(response => {
+                    if (response.data.success) {
+                        setFetchPaper(true);
+                        setRemoveNomi(false);
+                    }
+                }).catch((error => {
+                    console.error(error.response);
+                }))*/
+
+                /*// remove from nomi
                 setRemoveNomi(true);
                 removeRev({
-                    name: '',
-                    email: approveNomiRev.reviewer_email,
                     paper_id: approveNomiRev.paper_id,
-                    user_id: 1
-                });
+                    email: approveNomiRev.reviewer_email
+                });*/
                 setFetchPaper(true);
             }
         }).catch((error => {
             console.error(error.response);
         }))
+    }
+
+    const handleChange = (e, { name, value }) => {
+        setPaper({
+            ...paper,
+            [name]: value
+        });
+
+        if (!newPaper)
+            setChanged({
+                ...changed,
+                [name]: value
+            })
+        else
+            setChanged({ new_journal: true });
+    }
+
+    const saveField = (name, value) => {
     }
 
     // return 
@@ -126,7 +168,25 @@ const EditPaper = () => {
                 <Table.Body> 
                     <Table.Row>
                         <Table.Cell>Title</Table.Cell>
-                        <Table.Cell>{paper.title}</Table.Cell>
+                        <Table.Cell>
+                            <Form.Field>
+                                <Form.Input placeholder="Title"
+                                    name="title"
+                                    value={paper.title}
+                                    onChange={handleChange}
+                                    error={error && error.title &&
+                                    {
+                                        content: error.title.join(' & '),
+                                        pointing: 'left'
+                                    }}
+                                    icon={!newPaper && changed?.title && {
+                                        name: 'save',
+                                        circular: true,
+                                        link: true,
+                                        onClick: e => saveField('title', paper.title)
+                                    }} />
+                            </Form.Field>
+                            </Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>Status</Table.Cell>
@@ -141,10 +201,6 @@ const EditPaper = () => {
                     <Table.Row>
                         <Table.Cell>Researcher Email</Table.Cell>
                         <Table.Cell>{paper.researcher_email}</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                        <Table.Cell>Evaluation Metric</Table.Cell>
-                        <Table.Cell>{paper.em_name}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>File</Table.Cell>
@@ -164,6 +220,23 @@ const EditPaper = () => {
             </Table>
             <Divider />
             <Segment clearing vertical>
+                <Header>Evaluation Metric: {evaluationMetric?.name}</Header>
+            </Segment>
+            <Divider hidden />
+            <Card.Group>
+                {evaluationMetric?.questions.map(metric =>
+                    <Card>
+                        <Card.Content>
+                            <Card.Header>{metric.question}</Card.Header>
+                            <Card.Meta>
+                                <span>{metric.answer_type}</span>
+                            </Card.Meta>
+
+                        </Card.Content>
+                    </Card>)}
+            </Card.Group>
+            <Divider />
+            <Segment clearing vertical>
                 <Header floated='left' >Nominated Reviewers</Header>
             </Segment>
             <Table celled>
@@ -180,6 +253,7 @@ const EditPaper = () => {
                             <Table.Cell>{nomi.reviewer}</Table.Cell>
                             <Table.Cell>{nomi.reviewer_email}</Table.Cell>
                             <Table.Cell textAlign='center'>
+                                {!nomi.assigned && <> 
                                 <Button color='green' animated='vertical'
                                         onClick={(e) => {
                                             approveNomiRevMethod({
@@ -212,7 +286,8 @@ const EditPaper = () => {
                                     <Button.Content visible>
                                         <Icon name='x' />
                                     </Button.Content>
-                                </Button>                                     
+                                </Button> 
+                                </>}                                    
                             </Table.Cell>
                         </Table.Row>
                     )}

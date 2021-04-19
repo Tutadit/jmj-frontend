@@ -49,7 +49,7 @@ const PapersList = () => {
                             <Table.Cell>{paper.researcher}</Table.Cell>
                             <Table.Cell>{paper.researcher_email}</Table.Cell>
                             <Table.Cell textAlign='center'>
-                                <Button primary
+                                <Button secondary
                                     icon
                                     onClick={e => {
                                         setPaper(paper)
@@ -59,7 +59,7 @@ const PapersList = () => {
                                     <Icon name="file alternate" />
                                     {paper.file_path}
                                 </Button>
-                                <Button secondary animated='vertical'
+                                <Button primary animated='vertical'
                                         to={`/editor/papers/${paper.id}/details`}
                                         as={Link}>
                                     <Button.Content hidden>View</Button.Content>
