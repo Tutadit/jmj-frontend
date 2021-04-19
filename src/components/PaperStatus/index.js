@@ -10,7 +10,7 @@ const PaperStatus = ({ status=''}) => {
             <Step active={status === 'pending_assignment'}>
                 <Step.Content>
                     <Step.Title>Pending Assignment</Step.Title>
-                    <Step.Description>Waiting to be assigned an editor</Step.Description>
+                    <Step.Description>Waiting to be assigned an evaluation metric</Step.Description>
                 </Step.Content>
             </Step>
             <Step  active={status === 'pending_revision'}>

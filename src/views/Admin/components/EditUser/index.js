@@ -165,7 +165,7 @@ const EditUser = () => {
                 setChanged({})
                 setError({});
                 if (newUser) {
-                    history.replace(`/admin/users/${response.data.user.id}/viewG`)
+                    history.replace(`/admin/users/${response.data.user.id}/view`)
                 }
             }
 

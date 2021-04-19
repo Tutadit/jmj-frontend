@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import API from '../../../../utils/API';
-import { Container, Header, Loader, Table, Icon, Button, Segment, Modal, Embed } from 'semantic-ui-react';
+import { Container, Header, Loader, Table, Icon, Button, Segment, Modal, Embed, Message } from 'semantic-ui-react';
 
 import './index.css'
 
@@ -50,6 +50,7 @@ const ViewWithdrawls = () => {
     return (
         <Container className="edit-publication">
             <Header dividing>Paper withrawal requests</Header>
+            { papers && papers.length > 0 ?
             <Table>
                 <Table.Header>
                     <Table.Row>
@@ -61,7 +62,7 @@ const ViewWithdrawls = () => {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {papers && papers.map(paper =>
+                    {papers.map(paper =>
                         <Table.Row key={paper.id}>
                             <Table.Cell>{paper.title}</Table.Cell>
                             <Table.Cell>{paper.researcher_email}</Table.Cell>
@@ -106,7 +107,7 @@ const ViewWithdrawls = () => {
                         </Table.Row>
                     )}
                 </Table.Body>
-            </Table>
+            </Table> : <Message>There are no withdrawal requests</Message>}
 
             <Modal
                 dimmer='inverted'
@@ -138,8 +139,7 @@ const ViewWithdrawls = () => {
                         defaultActive
                         icon='right circle arrow'
                         placeholder='/images/image-16by9.png'
-                        url={`http://localhost/storage/${paper?.file_path}`}
-                    />
+                        url={`http://localhost/storage/${paper?.file_path}`} />
                 </Modal.Content>
             </Modal>
 

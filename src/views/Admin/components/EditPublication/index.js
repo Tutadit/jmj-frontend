@@ -43,7 +43,7 @@ const EditPublication = () => {
 
     const [admins, setAdmins] = useState(null);
     const [editors, setEditors] = useState(null);
-    const [fetchUsers, setFetchUsers] = useState(false);
+    const [fetchUsers, setFetchUsers] = useState(true);
 
     const newJournal = id === 'new'
 
